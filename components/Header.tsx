@@ -183,25 +183,6 @@ export function Header({ onOpenTransactionModal }: HeaderProps) {
         </div>
       </div>
 
-      {/* Sleek Mobile Bottom Fixed Floating Quick Bar */}
-      <div className="md:hidden fixed bottom-4 left-4 right-4 z-40 bg-slate-900/90 text-white backdrop-blur-xl border border-slate-700/60 p-2.5 rounded-2xl shadow-2xl flex items-center justify-around gap-2">
-        <button
-          onClick={() => onOpenTransactionModal('expense')}
-          className="flex-1 inline-flex items-center justify-center gap-2 py-2.5 px-3 rounded-xl bg-gradient-to-r from-emerald-500 to-cyan-500 text-slate-950 font-extrabold font-mono text-xs shadow-md active:scale-95 cursor-pointer"
-        >
-          <Plus className="w-4 h-4 text-slate-950" />
-          <span>{t.addExpense}</span>
-        </button>
-
-        <button
-          onClick={() => onOpenTransactionModal('income')}
-          className="flex-1 inline-flex items-center justify-center gap-2 py-2.5 px-3 rounded-xl bg-slate-800 hover:bg-slate-700 text-emerald-400 font-extrabold font-mono text-xs border border-slate-700 active:scale-95 cursor-pointer"
-        >
-          <ArrowUpRight className="w-4 h-4 text-emerald-400" />
-          <span>{t.addIncome}</span>
-        </button>
-      </div>
-
       <AuthModal isOpen={isAuthModalOpen} onClose={() => setIsAuthModalOpen(false)} />
       <OnboardingTutorial isOpen={isTutorialOpen} onClose={() => setIsTutorialOpen(false)} />
     </header>
