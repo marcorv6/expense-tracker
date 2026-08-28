@@ -6,4 +6,5 @@ export const SPENDFLOW_STORAGE_KEYS = {
   CURRENCY_PREFERENCE: 'spendflow_pref_currency_v1',
   LANGUAGE_PREFERENCE: 'spendflow_pref_lang_v1',
   TUTORIAL_SEEN: 'spendflow_tutorial_seen_v1',
+  TRIGGER_TOUR_ON_LOGIN: 'spendflow_trigger_tour_on_login_v1',
 } as const;

@@ -131,66 +131,103 @@
 
 /* Driver.js Custom SpendFlow Fintech Tour Styling */
 .driver-popover.spendflow-tour-popover {
-  background-color: #ffffff;
-  color: #0f172a;
-  border-radius: 1.25rem;
-  border: 1px solid #e2e8f0;
-  box-shadow: 0 25px 50px -12px rgba(15, 23, 42, 0.25);
-  font-family: 'Plus Jakarta Sans', sans-serif;
-  padding: 1.25rem;
-  max-width: 320px;
+  background-color: #ffffff !important;
+  color: #0f172a !important;
+  border-radius: 1.25rem !important;
+  border: 1px solid #e2e8f0 !important;
+  box-shadow: 0 25px 50px -12px rgba(15, 23, 42, 0.25) !important;
+  font-family: 'Plus Jakarta Sans', sans-serif !important;
+  padding: 1.25rem !important;
+  max-width: 330px !important;
 }
 
 .driver-popover.spendflow-tour-popover .driver-popover-title {
-  font-size: 0.95rem;
-  font-weight: 800;
-  color: #0f172a;
-  margin-bottom: 0.5rem;
+  font-size: 0.95rem !important;
+  font-weight: 800 !important;
+  color: #0f172a !important;
+  margin-bottom: 0.5rem !important;
 }
 
 .driver-popover.spendflow-tour-popover .driver-popover-description {
-  font-size: 0.75rem;
-  color: #64748b;
-  line-height: 1.5;
-  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.75rem !important;
+  color: #475569 !important;
+  line-height: 1.5 !important;
+  font-family: 'JetBrains Mono', monospace !important;
 }
 
 .driver-popover.spendflow-tour-popover .driver-popover-footer {
-  margin-top: 1rem;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
+  margin-top: 1rem !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: space-between !important;
+  gap: 0.5rem !important;
+}
+
+.driver-popover.spendflow-tour-popover .driver-popover-navigation-btns {
+  display: flex !important;
+  align-items: center !important;
+  gap: 0.5rem !important;
 }
 
 .driver-popover.spendflow-tour-popover .driver-popover-btn {
-  font-family: 'JetBrains Mono', monospace;
-  font-size: 0.7rem;
-  font-weight: 700;
-  border-radius: 0.75rem;
-  padding: 0.4rem 0.8rem;
-  background-color: #0f172a;
-  color: #ffffff;
-  border: none;
-  transition: all 0.2s ease;
-  cursor: pointer;
+  font-family: 'JetBrains Mono', monospace !important;
+  font-size: 0.75rem !important;
+  font-weight: 800 !important;
+  border-radius: 0.75rem !important;
+  padding: 0.45rem 0.9rem !important;
+  background-color: #0f172a !important;
+  color: #ffffff !important;
+  border: 1px solid #0f172a !important;
+  transition: all 0.2s ease !important;
+  cursor: pointer !important;
+  text-shadow: none !important;
+}
+
+.driver-popover.spendflow-tour-popover .driver-popover-next-btn,
+.driver-popover.spendflow-tour-popover .driver-popover-done-btn {
+  background-color: #0f172a !important;
+  color: #ffffff !important;
+  box-shadow: 0 4px 12px rgba(15, 23, 42, 0.2) !important;
+}
+
+.driver-popover.spendflow-tour-popover .driver-popover-next-btn:hover,
+.driver-popover.spendflow-tour-popover .driver-popover-done-btn:hover {
+  background-color: #1e293b !important;
+  color: #ffffff !important;
 }
 
 .driver-popover.spendflow-tour-popover .driver-popover-prev-btn {
-  background-color: #f1f5f9;
-  color: #475569;
-}
-.driver-popover.spendflow-tour-popover .driver-popover-prev-btn:hover {
-  background-color: #e2e8f0;
-  color: #0f172a;
+  background-color: #f1f5f9 !important;
+  color: #334155 !important;
+  border: 1px solid #cbd5e1 !important;
 }
 
-.driver-popover.spendflow-tour-popover .driver-popover-next-btn:hover {
-  background-color: #1e293b;
+.driver-popover.spendflow-tour-popover .driver-popover-prev-btn:hover {
+  background-color: #e2e8f0 !important;
+  color: #0f172a !important;
+}
+
+.driver-popover.spendflow-tour-popover .driver-popover-btn-disabled {
+  opacity: 0.4 !important;
+  cursor: not-allowed !important;
+  background-color: #f8fafc !important;
+  color: #94a3b8 !important;
+  border-color: #e2e8f0 !important;
+}
+
+.driver-popover.spendflow-tour-popover .driver-popover-close-btn {
+  color: #64748b !important;
+  font-size: 1.1rem !important;
+  padding: 0.25rem !important;
+}
+
+.driver-popover.spendflow-tour-popover .driver-popover-close-btn:hover {
+  color: #0f172a !important;
 }
 
 .driver-popover.spendflow-tour-popover .driver-popover-progress-text {
-  font-family: 'JetBrains Mono', monospace;
-  font-size: 0.7rem;
-  font-weight: 700;
-  color: #94a3b8;
+  font-family: 'JetBrains Mono', monospace !important;
+  font-size: 0.75rem !important;
+  font-weight: 800 !important;
+  color: #64748b !important;
 }

@@ -2,6 +2,7 @@
 
 import React, { useState } from 'react';
 import { useAuth } from '@/context/AuthContext';
+import { SPENDFLOW_STORAGE_KEYS } from '@/lib/constants/storage';
 import { X, Sparkles, LogIn, UserPlus, Lock } from 'lucide-react';
 
 interface AuthModalProps {
@@ -24,6 +25,9 @@ export function AuthModal({ isOpen, onClose, forceAuth = false }: AuthModalProps
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
+      if (typeof window !== 'undefined') {
+        localStorage.setItem(SPENDFLOW_STORAGE_KEYS.TRIGGER_TOUR_ON_LOGIN, 'true');
+      }
       if (isRegister) {
         await register({ email, password, name });
       } else {
@@ -37,6 +41,9 @@ export function AuthModal({ isOpen, onClose, forceAuth = false }: AuthModalProps
 
   const handleDemoClick = async () => {
     try {
+      if (typeof window !== 'undefined') {
+        localStorage.setItem(SPENDFLOW_STORAGE_KEYS.TRIGGER_TOUR_ON_LOGIN, 'true');
+      }
       await loginAsDemoGuest();
       if (!isLocked) onClose();
     } catch {

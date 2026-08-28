@@ -22,6 +22,7 @@ export function startSpendFlowTour() {
     onDestroyStarted: () => {
       if (typeof window !== 'undefined') {
         localStorage.setItem(SPENDFLOW_STORAGE_KEYS.TUTORIAL_SEEN, 'true');
+        localStorage.removeItem(SPENDFLOW_STORAGE_KEYS.TRIGGER_TOUR_ON_LOGIN);
       }
       driverObj.destroy();
     },
@@ -102,11 +103,14 @@ interface InteractiveTourProps {
 export function InteractiveTour({ autoStartOnFirstVisit = true }: InteractiveTourProps) {
   useEffect(() => {
     if (typeof window !== 'undefined' && autoStartOnFirstVisit) {
+      const triggerFlag = localStorage.getItem(SPENDFLOW_STORAGE_KEYS.TRIGGER_TOUR_ON_LOGIN);
       const seen = localStorage.getItem(SPENDFLOW_STORAGE_KEYS.TUTORIAL_SEEN);
-      if (!seen) {
+
+      if (triggerFlag === 'true' && !seen) {
+        localStorage.removeItem(SPENDFLOW_STORAGE_KEYS.TRIGGER_TOUR_ON_LOGIN);
         const timer = setTimeout(() => {
           startSpendFlowTour();
-        }, 600);
+        }, 700);
         return () => clearTimeout(timer);
       }
     }
