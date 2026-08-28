@@ -244,12 +244,12 @@ export default function DashboardPage() {
           <div className="flex-1 space-y-8">
             {/* KPI Metrics & Virtual Credit Card Header */}
             <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
-              {/* Virtual Credit Card Display */}
+              {/* Net Liquidity Available Reserve Display */}
               <MetricCard
                 title={t.netLiquidity}
                 amount={stats?.totalBalance || 5480}
                 icon={Wallet}
-                isVirtualCard={true}
+                isMainBalanceCard={true}
               />
 
               <MetricCard

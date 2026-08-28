@@ -4,6 +4,7 @@ import React, { useState } from 'react';
 import { CategoryBreakdown } from '@/types/expense';
 import { Share2, Smartphone, CreditCard, ShoppingBag, Zap, Layers } from 'lucide-react';
 import { usePreferences } from '@/context/PreferencesContext';
+import { toast } from 'sonner';
 
 interface SpendingChartsProps {
   categoryBreakdown: CategoryBreakdown[];
@@ -42,6 +43,13 @@ export function SpendingCharts({
 
   const activePoint = chartPoints[selectedIndex] || chartPoints[3] || chartPoints[0];
 
+  const handleShareReport = () => {
+    if (typeof window !== 'undefined') {
+      navigator.clipboard.writeText(window.location.href);
+      toast.success('Dashboard analytics report link copied to clipboard!');
+    }
+  };
+
   // Smooth Cubic Bezier SVG Path construction with unique SpendFlow wave shape
   const pathD = `M 30,75 C 65,30 65,45 100,45 C 135,45 135,65 170,65 C 205,65 205,35 240,35 C 275,35 275,55 310,55 C 345,55 345,40 370,40`;
   const areaD = `${pathD} L 370,110 L 30,110 Z`;
@@ -52,19 +60,23 @@ export function SpendingCharts({
       <div className="p-7 rounded-3xl glass-card space-y-6 flex flex-col justify-between">
         {/* Top Header */}
         <div className="flex items-center justify-between">
-          <div className="flex items-center gap-2">
-            <div className="w-8 h-8 rounded-xl bg-slate-900 text-emerald-400 flex items-center justify-center font-bold text-xs">
+          <div className="flex items-center gap-2.5">
+            <div className="w-8 h-8 rounded-xl bg-slate-900 text-emerald-400 flex items-center justify-center font-bold text-xs shadow-sm">
               <Zap className="w-4 h-4" />
             </div>
             <div>
               <h3 className="text-base font-extrabold text-slate-900 tracking-tight leading-tight">
                 Cashflow Dynamics
               </h3>
-              <span className="text-[11px] font-mono text-slate-400">Live Expenditure Velocity</span>
+              <span className="text-[11px] font-mono text-slate-400 font-semibold">Live Expenditure Velocity</span>
             </div>
           </div>
 
-          <button className="p-2 rounded-2xl border border-slate-200 hover:bg-slate-100 text-slate-500 transition-colors cursor-pointer shadow-sm">
+          <button
+            onClick={handleShareReport}
+            className="p-2 rounded-2xl border border-slate-200 hover:bg-slate-100 text-slate-600 hover:text-slate-900 transition-colors cursor-pointer shadow-sm"
+            title="Share Dashboard Analytics"
+          >
             <Share2 className="w-4 h-4" />
           </button>
         </div>
