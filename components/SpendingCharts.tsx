@@ -189,8 +189,8 @@ export function SpendingCharts({
         </div>
 
         {/* Dynamic Smooth Bezier Wave SVG Curve generated from actual data points */}
-        <div className="relative pt-6 pb-2">
-          <svg className="w-full h-36 overflow-visible" viewBox="0 0 400 120" preserveAspectRatio="none">
+        <div className="relative pt-6 pb-2 overflow-hidden">
+          <svg className="w-full h-36 overflow-hidden" viewBox="0 0 400 120" preserveAspectRatio="none">
             <defs>
               <linearGradient id="spendFlowGradient" x1="0" y1="0" x2="0" y2="1">
                 <stop offset="0%" stopColor="#10b981" stopOpacity="0.22" />
@@ -237,7 +237,7 @@ export function SpendingCharts({
             />
 
             {/* Dynamic i18n Value Callout Badge */}
-            <g transform={`translate(${activePoint.x - 45}, ${activePoint.y - 34})`}>
+            <g transform={`translate(${Math.min(Math.max(activePoint.x - 45, 5), 305)}, ${Math.max(activePoint.y - 34, 4)})`}>
               <rect
                 x="0"
                 y="0"

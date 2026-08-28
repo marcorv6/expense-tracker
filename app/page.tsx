@@ -233,7 +233,7 @@ export default function DashboardPage() {
   }
 
   return (
-    <div className="min-h-screen bg-background text-foreground flex flex-col font-sans">
+    <div className="min-h-screen max-w-full overflow-x-hidden bg-background text-foreground flex flex-col font-sans">
       <Header
         onOpenTransactionModal={(type) => openTxModal(type)}
         onOpenCategoryModal={() => setIsCatModalOpen(true)}
