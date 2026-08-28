@@ -3,6 +3,8 @@
 import React, { createContext, useContext, useState, useSyncExternalStore } from 'react';
 import { SupportedCurrency, SupportedLanguage, Translations, TRANSLATIONS } from '@/lib/i18n/translations';
 
+import { SPENDFLOW_STORAGE_KEYS } from '@/lib/constants/storage';
+
 interface PreferencesContextType {
   currency: SupportedCurrency;
   setCurrency: (c: SupportedCurrency) => void;
@@ -30,7 +32,7 @@ export function PreferencesProvider({ children }: { children: React.ReactNode })
 
   const [currency, setCurrencyState] = useState<SupportedCurrency>(() => {
     if (typeof window !== 'undefined') {
-      const storedCurr = localStorage.getItem('spendflow_user_currency') as SupportedCurrency;
+      const storedCurr = localStorage.getItem(SPENDFLOW_STORAGE_KEYS.CURRENCY_PREFERENCE) as SupportedCurrency;
       if (storedCurr && ['USD', 'EUR', 'GBP', 'MXN', 'CAD', 'JPY', 'BRL', 'AUD'].includes(storedCurr)) {
         return storedCurr;
       }
@@ -40,7 +42,7 @@ export function PreferencesProvider({ children }: { children: React.ReactNode })
 
   const [language, setLanguageState] = useState<SupportedLanguage>(() => {
     if (typeof window !== 'undefined') {
-      const storedLang = localStorage.getItem('spendflow_user_language') as SupportedLanguage;
+      const storedLang = localStorage.getItem(SPENDFLOW_STORAGE_KEYS.LANGUAGE_PREFERENCE) as SupportedLanguage;
       if (storedLang && ['en', 'es', 'fr', 'de', 'pt'].includes(storedLang)) {
         return storedLang;
       }
@@ -51,14 +53,14 @@ export function PreferencesProvider({ children }: { children: React.ReactNode })
   const setCurrency = (c: SupportedCurrency) => {
     setCurrencyState(c);
     if (typeof window !== 'undefined') {
-      localStorage.setItem('spendflow_user_currency', c);
+      localStorage.setItem(SPENDFLOW_STORAGE_KEYS.CURRENCY_PREFERENCE, c);
     }
   };
 
   const setLanguage = (l: SupportedLanguage) => {
     setLanguageState(l);
     if (typeof window !== 'undefined') {
-      localStorage.setItem('spendflow_user_language', l);
+      localStorage.setItem(SPENDFLOW_STORAGE_KEYS.LANGUAGE_PREFERENCE, l);
     }
   };
 

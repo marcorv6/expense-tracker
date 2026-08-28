@@ -172,11 +172,13 @@ const DEFAULT_TRANSACTIONS: TransactionItem[] = [
   },
 ];
 
+import { SPENDFLOW_STORAGE_KEYS } from '@/lib/constants/storage';
+
 function getStoredCategories(): Category[] {
   if (typeof window === 'undefined') return DEFAULT_CATEGORIES;
-  const str = localStorage.getItem('spendflow_categories_mock_v1');
+  const str = localStorage.getItem(SPENDFLOW_STORAGE_KEYS.CATEGORIES_MOCK);
   if (!str) {
-    localStorage.setItem('spendflow_categories_mock_v1', JSON.stringify(DEFAULT_CATEGORIES));
+    localStorage.setItem(SPENDFLOW_STORAGE_KEYS.CATEGORIES_MOCK, JSON.stringify(DEFAULT_CATEGORIES));
     return DEFAULT_CATEGORIES;
   }
   try {
@@ -188,9 +190,9 @@ function getStoredCategories(): Category[] {
 
 function getStoredTransactions(): TransactionItem[] {
   if (typeof window === 'undefined') return DEFAULT_TRANSACTIONS;
-  const str = localStorage.getItem('spendflow_transactions_mock_v1');
+  const str = localStorage.getItem(SPENDFLOW_STORAGE_KEYS.TRANSACTIONS_MOCK);
   if (!str) {
-    localStorage.setItem('spendflow_transactions_mock_v1', JSON.stringify(DEFAULT_TRANSACTIONS));
+    localStorage.setItem(SPENDFLOW_STORAGE_KEYS.TRANSACTIONS_MOCK, JSON.stringify(DEFAULT_TRANSACTIONS));
     return DEFAULT_TRANSACTIONS;
   }
   try {
@@ -202,20 +204,20 @@ function getStoredTransactions(): TransactionItem[] {
 
 function setStoredTransactions(txs: TransactionItem[]) {
   if (typeof window !== 'undefined') {
-    localStorage.setItem('spendflow_transactions_mock_v1', JSON.stringify(txs));
+    localStorage.setItem(SPENDFLOW_STORAGE_KEYS.TRANSACTIONS_MOCK, JSON.stringify(txs));
   }
 }
 
 function setStoredCategories(cats: Category[]) {
   if (typeof window !== 'undefined') {
-    localStorage.setItem('spendflow_categories_mock_v1', JSON.stringify(cats));
+    localStorage.setItem(SPENDFLOW_STORAGE_KEYS.CATEGORIES_MOCK, JSON.stringify(cats));
   }
 }
 
 export const mockApiClient: ApiClientInterface = {
   getCurrentUser() {
     if (typeof window === 'undefined') return null;
-    const userStr = localStorage.getItem('spendflow_auth_user_v1');
+    const userStr = localStorage.getItem(SPENDFLOW_STORAGE_KEYS.AUTH_USER);
     if (!userStr) return null;
     try {
       return JSON.parse(userStr);
@@ -226,15 +228,15 @@ export const mockApiClient: ApiClientInterface = {
 
   getCurrentToken() {
     if (typeof window === 'undefined') return null;
-    return localStorage.getItem('spendflow_auth_token_v1');
+    return localStorage.getItem(SPENDFLOW_STORAGE_KEYS.AUTH_TOKEN);
   },
 
   async login(credentials) {
     const user = { ...DEMO_USER, email: credentials.email || DEMO_USER.email };
     const token = 'mock-jwt-token-user';
     if (typeof window !== 'undefined') {
-      localStorage.setItem('spendflow_auth_token_v1', token);
-      localStorage.setItem('spendflow_auth_user_v1', JSON.stringify(user));
+      localStorage.setItem(SPENDFLOW_STORAGE_KEYS.AUTH_TOKEN, token);
+      localStorage.setItem(SPENDFLOW_STORAGE_KEYS.AUTH_USER, JSON.stringify(user));
     }
     return { user, token };
   },
@@ -249,8 +251,8 @@ export const mockApiClient: ApiClientInterface = {
     };
     const token = `mock-jwt-token-${user.id}`;
     if (typeof window !== 'undefined') {
-      localStorage.setItem('spendflow_auth_token_v1', token);
-      localStorage.setItem('spendflow_auth_user_v1', JSON.stringify(user));
+      localStorage.setItem(SPENDFLOW_STORAGE_KEYS.AUTH_TOKEN, token);
+      localStorage.setItem(SPENDFLOW_STORAGE_KEYS.AUTH_USER, JSON.stringify(user));
     }
     return { user, token };
   },
@@ -258,16 +260,16 @@ export const mockApiClient: ApiClientInterface = {
   async loginAsDemoGuest() {
     const token = 'mock-jwt-token-recruiter-demo';
     if (typeof window !== 'undefined') {
-      localStorage.setItem('spendflow_auth_token_v1', token);
-      localStorage.setItem('spendflow_auth_user_v1', JSON.stringify(DEMO_USER));
+      localStorage.setItem(SPENDFLOW_STORAGE_KEYS.AUTH_TOKEN, token);
+      localStorage.setItem(SPENDFLOW_STORAGE_KEYS.AUTH_USER, JSON.stringify(DEMO_USER));
     }
     return { user: DEMO_USER, token };
   },
 
   async logout() {
     if (typeof window !== 'undefined') {
-      localStorage.removeItem('spendflow_auth_token_v1');
-      localStorage.removeItem('spendflow_auth_user_v1');
+      localStorage.removeItem(SPENDFLOW_STORAGE_KEYS.AUTH_TOKEN);
+      localStorage.removeItem(SPENDFLOW_STORAGE_KEYS.AUTH_USER);
     }
   },
 

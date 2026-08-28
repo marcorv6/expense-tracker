@@ -35,9 +35,11 @@ export interface ApiClientInterface {
   resetToDefaults?(): void;
 }
 
+import { SPENDFLOW_STORAGE_KEYS } from '@/lib/constants/storage';
+
 function isDemoUser(): boolean {
   if (typeof window === 'undefined') return false;
-  const userStr = localStorage.getItem('spendflow_auth_user_v1');
+  const userStr = localStorage.getItem(SPENDFLOW_STORAGE_KEYS.AUTH_USER);
   if (!userStr) return false;
   try {
     const user = JSON.parse(userStr);

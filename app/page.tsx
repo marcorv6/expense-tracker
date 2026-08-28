@@ -22,6 +22,7 @@ import {
   ArrowDownLeft,
 } from 'lucide-react';
 import { toast } from 'sonner';
+import { SPENDFLOW_STORAGE_KEYS } from '@/lib/constants/storage';
 
 export default function DashboardPage() {
   const { isAuthenticated, isLoading: isAuthLoading, isMounted: isAuthMounted } = useAuth();
@@ -50,7 +51,7 @@ export default function DashboardPage() {
 
   useEffect(() => {
     if (typeof window !== 'undefined') {
-      const seen = localStorage.getItem('spendflow_tutorial_seen');
+      const seen = localStorage.getItem(SPENDFLOW_STORAGE_KEYS.TUTORIAL_SEEN);
       if (!seen) {
         const timer = setTimeout(() => setIsTutorialOpen(true), 100);
         return () => clearTimeout(timer);
@@ -400,7 +401,7 @@ export default function DashboardPage() {
         onClose={() => {
           setIsTutorialOpen(false);
           if (typeof window !== 'undefined') {
-            localStorage.setItem('spendflow_tutorial_seen', 'true');
+            localStorage.setItem(SPENDFLOW_STORAGE_KEYS.TUTORIAL_SEEN, 'true');
           }
         }}
       />
