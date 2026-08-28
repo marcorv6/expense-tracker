@@ -12,6 +12,26 @@ interface SpendingChartsProps {
   transactions?: TransactionItem[];
 }
 
+function generateBezierPath(points: { x: number; y: number }[]): { pathD: string; areaD: string } {
+  if (!points || points.length === 0) return { pathD: '', areaD: '' };
+  if (points.length === 1) return { pathD: `M ${points[0].x},${points[0].y}`, areaD: '' };
+
+  let d = `M ${points[0].x},${points[0].y}`;
+  for (let i = 0; i < points.length - 1; i++) {
+    const p0 = points[i];
+    const p1 = points[i + 1];
+    const cp1x = p0.x + (p1.x - p0.x) / 2;
+    const cp1y = p0.y;
+    const cp2x = p0.x + (p1.x - p0.x) / 2;
+    const cp2y = p1.y;
+    d += ` C ${cp1x},${cp1y} ${cp2x},${cp2y} ${p1.x},${p1.y}`;
+  }
+  const last = points[points.length - 1];
+  const first = points[0];
+  const areaD = `${d} L ${last.x},110 L ${first.x},110 Z`;
+  return { pathD: d, areaD };
+}
+
 export function SpendingCharts({
   categoryBreakdown,
   monthlyTrends,
@@ -21,29 +41,41 @@ export function SpendingCharts({
   const [timeframe, setTimeframe] = useState<'week' | 'month' | 'year'>('month');
   const [selectedIndex, setSelectedIndex] = useState<number>(3);
 
-  const defaultPoints = [
-    { month: 'Jun', x: 30, y: 75, amount: 1840 },
-    { month: 'Jul', x: 100, y: 45, amount: 3290 },
-    { month: 'Aug', x: 170, y: 65, amount: 2150 },
-    { month: 'Sep', x: 240, y: 35, amount: 268.04 },
-    { month: 'Oct', x: 310, y: 55, amount: 3410 },
-    { month: 'Nov', x: 370, y: 40, amount: 2980 },
+  // Fallback points if monthlyTrends is empty
+  const defaultData = [
+    { month: 'Jun', expense: 1840 },
+    { month: 'Jul', expense: 3290 },
+    { month: 'Aug', expense: 2150 },
+    { month: 'Sep', expense: 2680.04 },
+    { month: 'Oct', expense: 3410 },
+    { month: 'Nov', expense: 2980 },
   ];
 
-  const chartPoints = monthlyTrends.length >= 4
-    ? monthlyTrends.slice(0, 6).map((item, idx) => {
-        const x = 30 + idx * 68;
-        const yPosList = [75, 45, 65, 35, 55, 40];
-        return {
-          month: item.month,
-          x,
-          y: yPosList[idx % yPosList.length],
-          amount: item.expense > 0 ? item.expense : defaultPoints[idx % defaultPoints.length].amount,
-        };
-      })
-    : defaultPoints;
+  const sourceData = monthlyTrends && monthlyTrends.length >= 4
+    ? monthlyTrends.slice(-6).map((item) => ({ month: item.month, expense: item.expense }))
+    : defaultData;
 
-  const activePoint = chartPoints[selectedIndex] || chartPoints[3] || chartPoints[0];
+  const maxExpense = Math.max(...sourceData.map((d) => d.expense), 100);
+
+  // Compute dynamic (x, y) coordinates proportional to actual expense data
+  const chartPoints = sourceData.map((item, idx) => {
+    const totalCount = sourceData.length;
+    const x = 30 + idx * (340 / Math.max(totalCount - 1, 1));
+    // High expense -> y near 30 (top of SVG), Low expense -> y near 90 (bottom of SVG)
+    const ratio = Math.min(Math.max(item.expense / maxExpense, 0.15), 1.0);
+    const y = Math.round(95 - ratio * 65);
+    return {
+      month: item.month,
+      x,
+      y,
+      amount: item.expense,
+    };
+  });
+
+  const activeIndex = Math.min(selectedIndex, chartPoints.length - 1);
+  const activePoint = chartPoints[activeIndex] || chartPoints[0];
+
+  const { pathD, areaD } = generateBezierPath(chartPoints);
 
   // Dynamic top expense transactions for Activity Highlights
   const topExpenses = transactions
@@ -58,13 +90,9 @@ export function SpendingCharts({
     }
   };
 
-  // Smooth Cubic Bezier SVG Path construction with unique SpendFlow wave shape
-  const pathD = `M 30,75 C 65,30 65,45 100,45 C 135,45 135,65 170,65 C 205,65 205,35 240,35 C 275,35 275,55 310,55 C 345,55 345,40 370,40`;
-  const areaD = `${pathD} L 370,110 L 30,110 Z`;
-
   return (
     <div className="grid md:grid-cols-2 gap-6">
-      {/* SpendFlow Wave Statistics Card */}
+      {/* SpendFlow Dynamic Wave Statistics Card */}
       <div className="p-7 rounded-3xl glass-card space-y-6 flex flex-col justify-between">
         {/* Top Header */}
         <div className="flex items-center justify-between">
@@ -131,12 +159,12 @@ export function SpendingCharts({
           </div>
         </div>
 
-        {/* Smooth Bezier Wave SVG Curve with Emerald Gradient */}
+        {/* Dynamic Smooth Bezier Wave SVG Curve generated from actual data points */}
         <div className="relative pt-6 pb-2">
           <svg className="w-full h-36 overflow-visible" viewBox="0 0 400 120" preserveAspectRatio="none">
             <defs>
               <linearGradient id="spendFlowGradient" x1="0" y1="0" x2="0" y2="1">
-                <stop offset="0%" stopColor="#10b981" stopOpacity="0.18" />
+                <stop offset="0%" stopColor="#10b981" stopOpacity="0.22" />
                 <stop offset="100%" stopColor="#10b981" stopOpacity="0.0" />
               </linearGradient>
               <filter id="shadow" x="-10%" y="-10%" width="120%" height="130%">
@@ -144,10 +172,10 @@ export function SpendingCharts({
               </filter>
             </defs>
 
-            {/* Gradient Fill under curve */}
+            {/* Dynamic Area Fill */}
             <path d={areaD} fill="url(#spendFlowGradient)" />
 
-            {/* Smooth Bezier Curve Line */}
+            {/* Dynamic Smooth Bezier Curve Line */}
             <path
               d={pathD}
               fill="none"
@@ -157,7 +185,7 @@ export function SpendingCharts({
               filter="url(#shadow)"
             />
 
-            {/* Dashed vertical indicator line */}
+            {/* Dashed vertical indicator line for selected point */}
             <line
               x1={activePoint.x}
               y1={activePoint.y + 6}
@@ -168,7 +196,7 @@ export function SpendingCharts({
               strokeDasharray="4 4"
             />
 
-            {/* Selected Dot */}
+            {/* Selected Active Data Node Dot */}
             <circle
               cx={activePoint.x}
               cy={activePoint.y}
@@ -202,7 +230,7 @@ export function SpendingCharts({
               </text>
             </g>
 
-            {/* Click targets */}
+            {/* Clickable Data Nodes */}
             {chartPoints.map((pt, idx) => (
               <circle
                 key={pt.month}
@@ -223,7 +251,7 @@ export function SpendingCharts({
                 key={pt.month}
                 onClick={() => setSelectedIndex(idx)}
                 className={`transition-all cursor-pointer ${
-                  selectedIndex === idx ? 'text-slate-900 font-extrabold text-sm' : 'hover:text-slate-600'
+                  activeIndex === idx ? 'text-slate-900 font-extrabold text-sm' : 'hover:text-slate-600'
                 }`}
               >
                 {pt.month}

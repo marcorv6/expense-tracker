@@ -58,11 +58,6 @@ export function MetricCard({
             {subtext || 'Total available net liquidity reserve'}
           </p>
         </div>
-
-        <div className="pt-3 border-t border-slate-100 flex items-center justify-between text-xs font-mono">
-          <span className="text-slate-400 font-semibold">Reserve Allocation</span>
-          <span className="font-extrabold text-slate-900">100% Secure</span>
-        </div>
       </div>
     );
   }
