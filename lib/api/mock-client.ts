@@ -18,6 +18,7 @@ const DEMO_USER: User = {
 };
 
 const DEFAULT_CATEGORIES: Category[] = [
+  { id: 'cat-general', userId: DEMO_USER.id, name: 'General', type: 'expense', color: '#64748b', icon: 'tag', monthlyBudget: 0 },
   { id: 'cat-housing', userId: DEMO_USER.id, name: 'Housing & Rent', type: 'expense', color: '#6366f1', icon: 'home', monthlyBudget: 2200 },
   { id: 'cat-food', userId: DEMO_USER.id, name: 'Food & Groceries', type: 'expense', color: '#10b981', icon: 'shopping-cart', monthlyBudget: 800 },
   { id: 'cat-dining', userId: DEMO_USER.id, name: 'Dining Out', type: 'expense', color: '#f59e0b', icon: 'utensils', monthlyBudget: 400 },
@@ -286,7 +287,18 @@ export const mockApiClient: ApiClientInterface = {
   async getTransactions(filters) {
     const currentUser = this.getCurrentUser();
     const userId = currentUser?.id || 'demo-user-123';
-    let list = getStoredTransactions().filter((t) => t.userId === userId);
+    const now = new Date();
+
+    // Auto-clear pending transactions whose future date has arrived
+    const allTxs = getStoredTransactions().map((t) => {
+      if (t.status === 'pending' && new Date(t.date) <= now) {
+        return { ...t, status: 'cleared' as const };
+      }
+      return t;
+    });
+    setStoredTransactions(allTxs);
+
+    let list = allTxs.filter((t) => t.userId === userId);
     if (filters?.type && filters.type !== 'all') {
       list = list.filter((t) => t.type === filters.type);
     }
@@ -341,21 +353,25 @@ export const mockApiClient: ApiClientInterface = {
     const categories = getStoredCategories();
     const cat = categories.find((c) => c.id === input.categoryId);
 
+    const txDate = input.date || new Date().toISOString();
+    const isFutureDate = new Date(txDate).getTime() > Date.now() + 60000;
+    const initialStatus = isFutureDate ? 'pending' : (input.status || 'cleared');
+
     const newTx: TransactionItem = {
       id: `tx-${Date.now()}`,
       userId,
       categoryId: input.categoryId,
-      categoryName: cat ? cat.name : 'Uncategorized',
+      categoryName: cat ? cat.name : 'General',
       categoryColor: cat ? cat.color : '#64748b',
-      categoryIcon: cat ? cat.icon : 'wallet',
+      categoryIcon: cat?.icon || 'tag',
       type: input.type,
-      amount: Number(input.amount),
+      amount: input.amount,
       currency: input.currency || 'USD',
-      date: input.date || new Date().toISOString(),
+      date: txDate,
       description: input.description,
       notes: input.notes,
       paymentMethod: input.paymentMethod || 'credit_card',
-      status: input.status || 'cleared',
+      status: initialStatus,
       createdAt: new Date().toISOString(),
       updatedAt: new Date().toISOString(),
     };

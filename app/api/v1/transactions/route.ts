@@ -18,6 +18,14 @@ export async function GET(req: Request) {
     const sortBy = searchParams.get('sortBy') || 'date';
     const sortOrder = searchParams.get('sortOrder') === 'asc' ? 'ASC' : 'DESC';
 
+    // Auto-clear pending transactions whose future date has now arrived
+    await query(
+      `UPDATE transactions
+       SET status = 'cleared'
+       WHERE user_id = $1 AND status = 'pending' AND date <= CURRENT_TIMESTAMP`,
+      [user.userId]
+    );
+
     let sql = `
       SELECT t.id, t.user_id AS "userId", t.category_id AS "categoryId",
              c.name AS "categoryName", c.color AS "categoryColor", c.icon AS "categoryIcon",
@@ -78,6 +86,10 @@ export async function POST(req: Request) {
       return NextResponse.json({ error: 'Type, amount, category, and description are required' }, { status: 400 });
     }
 
+    const txDate = date || new Date().toISOString();
+    const isFutureDate = new Date(txDate).getTime() > Date.now() + 60000;
+    const initialStatus = isFutureDate ? 'pending' : (status || 'cleared');
+
     const rows = await query(
       `INSERT INTO transactions (user_id, category_id, type, amount, currency, date, description, notes, payment_method, status)
        VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10)
@@ -88,11 +100,11 @@ export async function POST(req: Request) {
         type,
         amount,
         currency || 'USD',
-        date || new Date().toISOString(),
+        txDate,
         sanitizeString(description),
         notes ? sanitizeString(notes) : null,
         paymentMethod || 'credit_card',
-        status || 'cleared',
+        initialStatus,
       ]
     );
 

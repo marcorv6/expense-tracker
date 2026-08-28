@@ -4,6 +4,7 @@ import React, { useState } from 'react';
 import { TransactionItem, Category, PaymentMethod, TransactionStatus, CreateTransactionInput } from '@/types/expense';
 import { X, Save, Receipt } from 'lucide-react';
 import { usePreferences } from '@/context/PreferencesContext';
+import { DatePicker } from './DatePicker';
 
 interface TransactionModalProps {
   isOpen: boolean;
@@ -195,16 +196,17 @@ export function TransactionModal({
               </select>
             </div>
 
-            <div className="space-y-1">
-              <label className="text-xs font-mono font-bold text-slate-600">{t.dateLabel}</label>
-              <input
-                type="date"
-                required
-                value={date}
-                onChange={(e) => setDate(e.target.value)}
-                className="w-full px-3.5 py-2 text-xs rounded-2xl border border-slate-200 bg-slate-50 text-slate-900 focus:ring-2 focus:ring-slate-900 focus:outline-none font-mono shadow-sm"
-              />
-            </div>
+            <DatePicker
+              label={t.dateLabel}
+              value={date}
+              onChange={(newDate) => {
+                setDate(newDate);
+                const isFutureDate = new Date(newDate + 'T00:00:00').getTime() > Date.now();
+                if (isFutureDate) {
+                  setStatus('pending');
+                }
+              }}
+            />
           </div>
 
           {/* Payment Method & Status */}

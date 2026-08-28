@@ -44,6 +44,7 @@ export async function POST(req: Request) {
 
     // Seed default starter categories for new user
     const defaultCategories = [
+      { name: 'General', type: 'expense', color: '#64748b', icon: 'tag', monthly_budget: 0 },
       { name: 'Housing & Rent', type: 'expense', color: '#6366f1', icon: 'home', monthly_budget: 2200 },
       { name: 'Food & Groceries', type: 'expense', color: '#10b981', icon: 'shopping-cart', monthly_budget: 800 },
       { name: 'Dining Out', type: 'expense', color: '#f59e0b', icon: 'utensils', monthly_budget: 400 },
