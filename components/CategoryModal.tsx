@@ -30,6 +30,18 @@ export function CategoryModal({
   const [monthlyBudget, setMonthlyBudget] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
 
+  const resetForm = () => {
+    setName('');
+    setType('expense');
+    setColor('#0f172a');
+    setMonthlyBudget('');
+  };
+
+  const handleCloseModal = () => {
+    resetForm();
+    onClose();
+  };
+
   if (!isOpen) return null;
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -44,8 +56,7 @@ export function CategoryModal({
         color,
         monthlyBudget: monthlyBudget ? parseFloat(monthlyBudget) : 0,
       });
-      setName('');
-      setMonthlyBudget('');
+      resetForm();
     } catch (err) {
       console.error(err);
     } finally {
@@ -62,7 +73,7 @@ export function CategoryModal({
             {t.categoriesAndCaps}
           </h3>
           <button
-            onClick={onClose}
+            onClick={handleCloseModal}
             className="p-2 rounded-full border border-slate-200 text-slate-400 hover:text-slate-900 transition-colors cursor-pointer"
           >
             <X className="w-4 h-4" />

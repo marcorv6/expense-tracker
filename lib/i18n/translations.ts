@@ -495,3 +495,21 @@ export const TRANSLATIONS: Record<SupportedLanguage, Translations> = {
     year: 'Ano',
   },
 };
+
+export function formatCurrencyAmount(amount: number, currency: SupportedCurrency = 'USD'): string {
+  const symbols: Record<SupportedCurrency, string> = {
+    USD: '$',
+    EUR: '€',
+    GBP: '£',
+    MXN: 'MX$',
+    CAD: 'CA$',
+    JPY: '¥',
+    BRL: 'R$',
+    AUD: 'A$',
+  };
+  const symbol = symbols[currency] || '$';
+  return `${symbol}${amount.toLocaleString('en-US', {
+    minimumFractionDigits: 2,
+    maximumFractionDigits: 2,
+  })}`;
+}

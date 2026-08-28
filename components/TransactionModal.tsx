@@ -40,6 +40,34 @@ export function TransactionModal({
   const [notes, setNotes] = useState<string>(initialData?.notes || '');
   const [isSubmitting, setIsSubmitting] = useState(false);
 
+  const resetForm = () => {
+    if (initialData) {
+      setType(initialData.type);
+      setAmount(initialData.amount.toString());
+      setDescription(initialData.description);
+      setCategoryId(initialData.categoryId);
+      setDate(new Date(initialData.date).toISOString().slice(0, 10));
+      setPaymentMethod(initialData.paymentMethod);
+      setStatus(initialData.status);
+      setNotes(initialData.notes || '');
+    } else {
+      setType(defaultType);
+      setAmount('');
+      setDescription('');
+      const defaultCat = categories.find((c) => c.type === defaultType)?.id || categories[0]?.id || '';
+      setCategoryId(defaultCat);
+      setDate(new Date().toISOString().slice(0, 10));
+      setPaymentMethod('credit_card');
+      setStatus('cleared');
+      setNotes('');
+    }
+  };
+
+  const handleCloseModal = () => {
+    resetForm();
+    onClose();
+  };
+
   if (!isOpen) return null;
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -58,6 +86,7 @@ export function TransactionModal({
         status,
         notes,
       });
+      resetForm();
       onClose();
     } catch (err) {
       console.error(err);
@@ -79,7 +108,7 @@ export function TransactionModal({
             {initialData ? 'Audit Transaction Entry' : `Log New ${type === 'expense' ? t.addExpense : t.addIncome}`}
           </h3>
           <button
-            onClick={onClose}
+            onClick={handleCloseModal}
             className="p-2 rounded-full border border-slate-200 text-slate-400 hover:text-slate-900 hover:bg-slate-50 transition-colors cursor-pointer"
           >
             <X className="w-4 h-4" />
