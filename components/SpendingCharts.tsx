@@ -2,7 +2,7 @@
 
 import React, { useState } from 'react';
 import { CategoryBreakdown, TransactionItem } from '@/types/expense';
-import { Share2, Smartphone, CreditCard, ShoppingBag, Zap, ArrowDownLeft } from 'lucide-react';
+import { Share2, CreditCard, ShoppingBag, Zap, ArrowDownLeft } from 'lucide-react';
 import { usePreferences } from '@/context/PreferencesContext';
 import { toast } from 'sonner';
 
@@ -43,15 +43,15 @@ export function SpendingCharts({
 
   // Fallback points if monthlyTrends is empty
   const defaultData = [
-    { month: 'Jun', expense: 1840 },
-    { month: 'Jul', expense: 3290 },
-    { month: 'Aug', expense: 2150 },
-    { month: 'Sep', expense: 2680.04 },
-    { month: 'Oct', expense: 3410 },
-    { month: 'Nov', expense: 2980 },
+    { month: 'Jun', expense: 0 },
+    { month: 'Jul', expense: 0 },
+    { month: 'Aug', expense: 0 },
+    { month: 'Sep', expense: 0 },
+    { month: 'Oct', expense: 0 },
+    { month: 'Nov', expense: 0 },
   ];
 
-  const sourceData = monthlyTrends && monthlyTrends.length >= 4
+  const sourceData = monthlyTrends && monthlyTrends.length > 0
     ? monthlyTrends.slice(-6).map((item) => ({ month: item.month, expense: item.expense }))
     : defaultData;
 
@@ -61,9 +61,9 @@ export function SpendingCharts({
   const chartPoints = sourceData.map((item, idx) => {
     const totalCount = sourceData.length;
     const x = 30 + idx * (340 / Math.max(totalCount - 1, 1));
-    // High expense -> y near 30 (top of SVG), Low expense -> y near 90 (bottom of SVG)
-    const ratio = Math.min(Math.max(item.expense / maxExpense, 0.15), 1.0);
-    const y = Math.round(95 - ratio * 65);
+    // High expense -> y near 30 (top of SVG), Low expense -> y near 95 (bottom of SVG)
+    const ratio = item.expense === 0 ? 0 : Math.min(Math.max(item.expense / maxExpense, 0.15), 1.0);
+    const y = item.expense === 0 ? 95 : Math.round(95 - ratio * 65);
     return {
       month: item.month,
       x,
@@ -299,41 +299,11 @@ export function SpendingCharts({
                 </div>
               ))
             ) : (
-              <>
-                <div className="flex items-center justify-between p-2.5 rounded-2xl bg-slate-50 border border-slate-100 hover:bg-slate-100/80 transition-all">
-                  <div className="flex items-center gap-3">
-                    <div className="w-9 h-9 rounded-2xl bg-slate-900 text-white flex items-center justify-center shadow-sm">
-                      <Smartphone className="w-4 h-4 text-emerald-400" />
-                    </div>
-                    <div>
-                      <span className="text-xs font-bold text-slate-900 block leading-tight">
-                        Hardware Equipment
-                      </span>
-                      <span className="text-[10px] font-mono text-slate-400">23 Aug, 2026</span>
-                    </div>
-                  </div>
-                  <span className="text-xs font-extrabold font-mono text-slate-900 tabular-nums">
-                    -{formatCurrency(745)}
-                  </span>
-                </div>
-
-                <div className="flex items-center justify-between p-2.5 rounded-2xl bg-slate-50 border border-slate-100 hover:bg-slate-100/80 transition-all">
-                  <div className="flex items-center gap-3">
-                    <div className="w-9 h-9 rounded-2xl bg-indigo-600 text-white flex items-center justify-center shadow-sm">
-                      <ArrowDownLeft className="w-4 h-4 text-white" />
-                    </div>
-                    <div>
-                      <span className="text-xs font-bold text-slate-900 block leading-tight">
-                        Cloud Infrastructure
-                      </span>
-                      <span className="text-[10px] font-mono text-slate-400">15 Aug, 2026</span>
-                    </div>
-                  </div>
-                  <span className="text-xs font-extrabold font-mono text-slate-900 tabular-nums">
-                    -{formatCurrency(35)}
-                  </span>
-                </div>
-              </>
+              <div className="p-3 rounded-2xl bg-slate-50 border border-slate-100 text-center">
+                <span className="text-xs font-mono text-slate-400">
+                  No recent activity highlights logged.
+                </span>
+              </div>
             )}
           </div>
         </div>

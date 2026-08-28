@@ -260,14 +260,14 @@ export default function DashboardPage() {
               {/* Net Liquidity Available Reserve Display */}
               <MetricCard
                 title={t.netLiquidity}
-                amount={stats?.totalBalance || 5480}
+                amount={stats?.totalBalance ?? 0}
                 icon={Wallet}
                 isMainBalanceCard={true}
               />
 
               <MetricCard
                 title={t.grossIncome}
-                amount={stats?.monthlyIncome || 0}
+                amount={stats?.monthlyIncome ?? 0}
                 subtext={t.salaryEarnings}
                 icon={ArrowUpRight}
                 trend={{ value: 24, isPositive: true }}
@@ -276,7 +276,7 @@ export default function DashboardPage() {
 
               <MetricCard
                 title={t.monthlyExpenditures}
-                amount={stats?.monthlyExpenses || 0}
+                amount={stats?.monthlyExpenses ?? 0}
                 subtext={t.operatingExpenses}
                 icon={ArrowDownLeft}
                 trend={{ value: -42, isPositive: false }}
