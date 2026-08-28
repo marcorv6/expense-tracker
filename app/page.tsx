@@ -10,6 +10,7 @@ import { TransactionList } from '@/components/TransactionList';
 import { TransactionModal } from '@/components/TransactionModal';
 import { CategoryModal } from '@/components/CategoryModal';
 import { AuthModal } from '@/components/AuthModal';
+import { Footer } from '@/components/Footer';
 import { useAuth } from '@/context/AuthContext';
 import { usePreferences } from '@/context/PreferencesContext';
 import { api } from '@/lib/api/client';
@@ -356,6 +357,8 @@ export default function DashboardPage() {
           </div>
         </div>
       </main>
+
+      <Footer />
 
       {/* Modals */}
       <TransactionModal
