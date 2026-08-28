@@ -214,18 +214,19 @@ function setStoredCategories(cats: Category[]) {
 
 export const mockApiClient: ApiClientInterface = {
   getCurrentUser() {
-    if (typeof window === 'undefined') return DEMO_USER;
+    if (typeof window === 'undefined') return null;
     const userStr = localStorage.getItem('spendflow_auth_user_v1');
+    if (!userStr) return null;
     try {
-      return userStr ? JSON.parse(userStr) : DEMO_USER;
+      return JSON.parse(userStr);
     } catch {
-      return DEMO_USER;
+      return null;
     }
   },
 
   getCurrentToken() {
-    if (typeof window === 'undefined') return 'mock-jwt-token-guest';
-    return localStorage.getItem('spendflow_auth_token_v1') || 'mock-jwt-token-guest';
+    if (typeof window === 'undefined') return null;
+    return localStorage.getItem('spendflow_auth_token_v1');
   },
 
   async login(credentials) {
