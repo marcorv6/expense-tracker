@@ -2,7 +2,7 @@
 
 import React, { useState } from 'react';
 import { CategoryBreakdown } from '@/types/expense';
-import { Share2, Smartphone, CreditCard, ShoppingBag, Globe } from 'lucide-react';
+import { Share2, Smartphone, CreditCard, ShoppingBag, Zap, Layers } from 'lucide-react';
 import { usePreferences } from '@/context/PreferencesContext';
 
 interface SpendingChartsProps {
@@ -16,7 +16,7 @@ export function SpendingCharts({
 }: SpendingChartsProps) {
   const { t, formatCurrency } = usePreferences();
   const [timeframe, setTimeframe] = useState<'week' | 'month' | 'year'>('month');
-  const [selectedIndex, setSelectedIndex] = useState<number>(3); // Default Sep (index 3)
+  const [selectedIndex, setSelectedIndex] = useState<number>(3);
 
   const defaultPoints = [
     { month: 'Jun', x: 30, y: 75, amount: 1840 },
@@ -42,46 +42,51 @@ export function SpendingCharts({
 
   const activePoint = chartPoints[selectedIndex] || chartPoints[3] || chartPoints[0];
 
-  // Smooth Cubic Bezier SVG Path construction
+  // Smooth Cubic Bezier SVG Path construction with unique SpendFlow wave shape
   const pathD = `M 30,75 C 65,30 65,45 100,45 C 135,45 135,65 170,65 C 205,65 205,35 240,35 C 275,35 275,55 310,55 C 345,55 345,40 370,40`;
+  const areaD = `${pathD} L 370,110 L 30,110 Z`;
 
   return (
     <div className="grid md:grid-cols-2 gap-6">
-      {/* Center Screen Replica: Statistics Wave Curve Card */}
+      {/* SpendFlow Wave Statistics Card */}
       <div className="p-7 rounded-3xl glass-card space-y-6 flex flex-col justify-between">
         {/* Top Header */}
         <div className="flex items-center justify-between">
-          <button className="p-2 rounded-full border border-slate-200 hover:bg-slate-100 text-slate-500 transition-colors cursor-pointer">
-            <span className="text-xs font-mono font-bold">←</span>
-          </button>
+          <div className="flex items-center gap-2">
+            <div className="w-8 h-8 rounded-xl bg-slate-900 text-emerald-400 flex items-center justify-center font-bold text-xs">
+              <Zap className="w-4 h-4" />
+            </div>
+            <div>
+              <h3 className="text-base font-extrabold text-slate-900 tracking-tight leading-tight">
+                Cashflow Dynamics
+              </h3>
+              <span className="text-[11px] font-mono text-slate-400">Live Expenditure Velocity</span>
+            </div>
+          </div>
 
-          <h3 className="text-base font-extrabold text-slate-900 tracking-tight">
-            Statistics
-          </h3>
-
-          <button className="p-2 rounded-full border border-slate-200 hover:bg-slate-100 text-slate-500 transition-colors cursor-pointer">
+          <button className="p-2 rounded-2xl border border-slate-200 hover:bg-slate-100 text-slate-500 transition-colors cursor-pointer shadow-sm">
             <Share2 className="w-4 h-4" />
           </button>
         </div>
 
         {/* Big Amount & Date */}
-        <div className="text-center space-y-0.5">
-          <div className="text-3xl font-extrabold font-mono text-slate-900 tabular-nums tracking-tight">
-            {formatCurrency(activePoint.amount)}
+        <div className="flex items-end justify-between pt-1">
+          <div>
+            <div className="text-3xl font-extrabold font-mono text-slate-900 tabular-nums tracking-tight">
+              {formatCurrency(activePoint.amount)}
+            </div>
+            <span className="text-xs font-mono text-slate-400 block font-medium">
+              Audit Period: {activePoint.month} 16, 2026
+            </span>
           </div>
-          <span className="text-xs font-mono text-slate-400 block font-medium">
-            {activePoint.month} 16, 2026
-          </span>
-        </div>
 
-        {/* Segmented Timeframe Capsule */}
-        <div className="flex justify-center">
-          <div className="inline-flex items-center p-1 rounded-full bg-slate-100 border border-slate-200/80 text-xs font-mono">
+          {/* Timeframe Pills */}
+          <div className="inline-flex items-center p-1 rounded-2xl bg-slate-100 border border-slate-200 text-xs font-mono">
             {(['week', 'month', 'year'] as const).map((tf) => (
               <button
                 key={tf}
                 onClick={() => setTimeframe(tf)}
-                className={`px-5 py-1.5 rounded-full font-bold capitalize transition-all cursor-pointer ${
+                className={`px-3.5 py-1 rounded-xl font-bold capitalize transition-all cursor-pointer ${
                   timeframe === tf
                     ? 'bg-slate-900 text-white shadow-sm'
                     : 'text-slate-500 hover:text-slate-900'
@@ -93,15 +98,21 @@ export function SpendingCharts({
           </div>
         </div>
 
-        {/* Smooth Bezier Wave SVG Curve */}
+        {/* Smooth Bezier Wave SVG Curve with Emerald Gradient */}
         <div className="relative pt-6 pb-2">
           <svg className="w-full h-36 overflow-visible" viewBox="0 0 400 120" preserveAspectRatio="none">
-            {/* Filter for smooth drop shadow underneath curve */}
             <defs>
+              <linearGradient id="spendFlowGradient" x1="0" y1="0" x2="0" y2="1">
+                <stop offset="0%" stopColor="#10b981" stopOpacity="0.18" />
+                <stop offset="100%" stopColor="#10b981" stopOpacity="0.0" />
+              </linearGradient>
               <filter id="shadow" x="-10%" y="-10%" width="120%" height="130%">
-                <feDropShadow dx="0" dy="6" stdDeviation="4" floodColor="#0f172a" floodOpacity="0.15" />
+                <feDropShadow dx="0" dy="6" stdDeviation="4" floodColor="#0f172a" floodOpacity="0.12" />
               </filter>
             </defs>
+
+            {/* Gradient Fill under curve */}
+            <path d={areaD} fill="url(#spendFlowGradient)" />
 
             {/* Smooth Bezier Curve Line */}
             <path
@@ -113,7 +124,7 @@ export function SpendingCharts({
               filter="url(#shadow)"
             />
 
-            {/* Dashed vertical indicator line for selected point */}
+            {/* Dashed vertical indicator line */}
             <line
               x1={activePoint.x}
               y1={activePoint.y + 6}
@@ -124,18 +135,18 @@ export function SpendingCharts({
               strokeDasharray="4 4"
             />
 
-            {/* Selected Dot: White circle with thick black border */}
+            {/* Selected Dot */}
             <circle
               cx={activePoint.x}
               cy={activePoint.y}
               r="6.5"
               fill="#ffffff"
-              stroke="#0f172a"
+              stroke="#10b981"
               strokeWidth="3.5"
               className="shadow-md transition-all duration-300"
             />
 
-            {/* Floating Value Pill Badge above active dot */}
+            {/* Value Callout Badge */}
             <g transform={`translate(${activePoint.x - 38}, ${activePoint.y - 34})`}>
               <rect
                 x="0"
@@ -143,15 +154,13 @@ export function SpendingCharts({
                 width="76"
                 height="24"
                 rx="12"
-                fill="#ffffff"
-                stroke="#e2e8f0"
-                strokeWidth="1"
-                className="shadow-md"
+                fill="#0f172a"
+                className="shadow-lg"
               />
               <text
                 x="38"
                 y="15"
-                fill="#0f172a"
+                fill="#34d399"
                 fontSize="11"
                 fontFamily="JetBrains Mono"
                 fontWeight="800"
@@ -161,7 +170,7 @@ export function SpendingCharts({
               </text>
             </g>
 
-            {/* Clickable transparent target points */}
+            {/* Click targets */}
             {chartPoints.map((pt, idx) => (
               <circle
                 key={pt.month}
@@ -191,20 +200,20 @@ export function SpendingCharts({
           </div>
         </div>
 
-        {/* Top Spending Sub-Section matching reference design */}
+        {/* Activity Highlights Sub-Section */}
         <div className="pt-2 border-t border-slate-100 space-y-3">
           <h4 className="text-xs font-extrabold font-mono text-slate-900 uppercase tracking-wider">
-            Top Spending
+            Activity Highlights
           </h4>
 
           <div className="space-y-2.5">
             <div className="flex items-center justify-between p-2.5 rounded-2xl bg-slate-50 border border-slate-100 hover:bg-slate-100/80 transition-all">
               <div className="flex items-center gap-3">
                 <div className="w-9 h-9 rounded-2xl bg-slate-900 text-white flex items-center justify-center shadow-sm">
-                  <Smartphone className="w-4 h-4" />
+                  <Smartphone className="w-4 h-4 text-emerald-400" />
                 </div>
                 <div>
-                  <span className="text-xs font-bold text-slate-900 block leading-tight">iPhone 16 Pro</span>
+                  <span className="text-xs font-bold text-slate-900 block leading-tight">Hardware Equipment</span>
                   <span className="text-[10px] font-mono text-slate-400">23 Aug, 2026</span>
                 </div>
               </div>
@@ -213,11 +222,11 @@ export function SpendingCharts({
 
             <div className="flex items-center justify-between p-2.5 rounded-2xl bg-slate-50 border border-slate-100 hover:bg-slate-100/80 transition-all">
               <div className="flex items-center gap-3">
-                <div className="w-9 h-9 rounded-2xl bg-gradient-to-tr from-amber-400 to-rose-500 text-white flex items-center justify-center shadow-sm">
-                  <Globe className="w-4 h-4" />
+                <div className="w-9 h-9 rounded-2xl bg-indigo-600 text-white flex items-center justify-center shadow-sm">
+                  <Layers className="w-4 h-4 text-white" />
                 </div>
                 <div>
-                  <span className="text-xs font-bold text-slate-900 block leading-tight">Payoneer Direct</span>
+                  <span className="text-xs font-bold text-slate-900 block leading-tight">Cloud Infrastructure</span>
                   <span className="text-[10px] font-mono text-slate-400">15 Aug, 2026</span>
                 </div>
               </div>
@@ -274,7 +283,7 @@ export function SpendingCharts({
           </div>
         )}
 
-        <div className="p-4 rounded-2xl bg-slate-900 text-white flex items-center justify-between">
+        <div className="p-4 rounded-2xl bg-slate-900 text-white flex items-center justify-between shadow-md">
           <div>
             <span className="text-[10px] font-mono text-slate-400 block font-semibold">Total Category Share</span>
             <span className="text-sm font-extrabold font-mono tabular-nums text-white">

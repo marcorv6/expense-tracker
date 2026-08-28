@@ -16,8 +16,5 @@ SpendFlow is a high-performance full-stack personal finance and expense manageme
 - **Backend & DB**: Next.js API Routes (`/api/v1/...`), Neon PostgreSQL (`@neondatabase/serverless`), JWT (`jsonwebtoken`, `bcryptjs`).
 - **Contracts**: OpenAPI 3.0 specification (`contracts/openapi.yaml`) & SQL schema (`database/schema.sql`).
 
-## 🎨 Design Attribution & Educational Disclaimer
-- **UI/UX Design**: Inspired by public Dribbble fintech mobile/web app design concepts.
-- **Educational Purpose**: SpendFlow is an open-source, non-commercial developer portfolio showcase created strictly for technical demonstration purposes.
-- **Data Privacy**: All transaction data, financial values, and merchant titles shown are fictional synthetic mock data.
-- **License**: Released under the open-source [MIT License](LICENSE).
+## License
+Released under the open-source [MIT License](LICENSE).
