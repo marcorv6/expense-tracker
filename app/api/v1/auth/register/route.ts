@@ -40,8 +40,29 @@ export async function POST(req: Request) {
       [cleanEmail, passwordHash, cleanName, currency || 'USD']
     );
 
-    const newUser = newUsers[0];
-    const token = signToken({ userId: (newUser as { id: string; email: string }).id, email: (newUser as { id: string; email: string }).email });
+    const newUser = newUsers[0] as { id: string; email: string };
+
+    // Seed default starter categories for new user
+    const defaultCategories = [
+      { name: 'Housing & Rent', type: 'expense', color: '#6366f1', icon: 'home', monthly_budget: 2200 },
+      { name: 'Food & Groceries', type: 'expense', color: '#10b981', icon: 'shopping-cart', monthly_budget: 800 },
+      { name: 'Dining Out', type: 'expense', color: '#f59e0b', icon: 'utensils', monthly_budget: 400 },
+      { name: 'Utilities & Internet', type: 'expense', color: '#06b6d4', icon: 'zap', monthly_budget: 300 },
+      { name: 'Tech & Subscriptions', type: 'expense', color: '#8b5cf6', icon: 'laptop', monthly_budget: 250 },
+      { name: 'Transportation', type: 'expense', color: '#ec4899', icon: 'car', monthly_budget: 350 },
+      { name: 'Salary & Earnings', type: 'income', color: '#22c55e', icon: 'briefcase', monthly_budget: 0 },
+      { name: 'Freelance Work', type: 'income', color: '#14b8a6', icon: 'code', monthly_budget: 0 },
+    ];
+
+    for (const cat of defaultCategories) {
+      await query(
+        `INSERT INTO categories (user_id, name, type, color, icon, monthly_budget)
+         VALUES ($1, $2, $3, $4, $5, $6)`,
+        [newUser.id, cat.name, cat.type, cat.color, cat.icon, cat.monthly_budget]
+      );
+    }
+
+    const token = signToken({ userId: newUser.id, email: newUser.email });
 
     return NextResponse.json({ user: newUser, token }, { status: 201 });
   } catch (error: unknown) {

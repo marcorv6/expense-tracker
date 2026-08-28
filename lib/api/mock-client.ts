@@ -250,6 +250,16 @@ export const mockApiClient: ApiClientInterface = {
       createdAt: new Date().toISOString(),
     };
     const token = `mock-jwt-token-${user.id}`;
+
+    // Seed starter categories for new user
+    const existingCats = getStoredCategories();
+    const starterCats = DEFAULT_CATEGORIES.map((c) => ({
+      ...c,
+      id: `cat-${user.id}-${c.id}`,
+      userId: user.id,
+    }));
+    setStoredCategories([...existingCats, ...starterCats]);
+
     if (typeof window !== 'undefined') {
       localStorage.setItem(SPENDFLOW_STORAGE_KEYS.AUTH_TOKEN, token);
       localStorage.setItem(SPENDFLOW_STORAGE_KEYS.AUTH_USER, JSON.stringify(user));
@@ -274,7 +284,9 @@ export const mockApiClient: ApiClientInterface = {
   },
 
   async getTransactions(filters) {
-    let list = [...getStoredTransactions()];
+    const currentUser = this.getCurrentUser();
+    const userId = currentUser?.id || 'demo-user-123';
+    let list = getStoredTransactions().filter((t) => t.userId === userId);
     if (filters?.type && filters.type !== 'all') {
       list = list.filter((t) => t.type === filters.type);
     }
@@ -317,22 +329,25 @@ export const mockApiClient: ApiClientInterface = {
   },
 
   async getTransactionById(id) {
-    const list = getStoredTransactions();
-    const found = list.find((t) => t.id === id);
-    if (!found) throw new Error('Transaction not found');
-    return found;
+    const t = getStoredTransactions().find((x) => x.id === id);
+    if (!t) throw new Error('Transaction not found');
+    return t;
   },
 
   async createTransaction(input: CreateTransactionInput) {
+    const currentUser = this.getCurrentUser();
+    const userId = currentUser?.id || DEMO_USER.id;
+    const list = getStoredTransactions();
     const categories = getStoredCategories();
     const cat = categories.find((c) => c.id === input.categoryId);
+
     const newTx: TransactionItem = {
       id: `tx-${Date.now()}`,
-      userId: DEMO_USER.id,
+      userId,
       categoryId: input.categoryId,
-      categoryName: cat?.name || 'General',
-      categoryColor: cat?.color || '#3b82f6',
-      categoryIcon: cat?.icon || 'wallet',
+      categoryName: cat ? cat.name : 'Uncategorized',
+      categoryColor: cat ? cat.color : '#64748b',
+      categoryIcon: cat ? cat.icon : 'wallet',
       type: input.type,
       amount: Number(input.amount),
       currency: input.currency || 'USD',
@@ -344,8 +359,8 @@ export const mockApiClient: ApiClientInterface = {
       createdAt: new Date().toISOString(),
       updatedAt: new Date().toISOString(),
     };
-    const list = [newTx, ...getStoredTransactions()];
-    setStoredTransactions(list);
+    
+    setStoredTransactions([newTx, ...list]);
     return newTx;
   },
 
@@ -389,8 +404,10 @@ export const mockApiClient: ApiClientInterface = {
   },
 
   async getCategories() {
-    const categories = getStoredCategories();
-    const transactions = getStoredTransactions();
+    const currentUser = this.getCurrentUser();
+    const userId = currentUser?.id || DEMO_USER.id;
+    const categories = getStoredCategories().filter((c) => c.userId === userId);
+    const transactions = getStoredTransactions().filter((t) => t.userId === userId);
 
     return categories.map((cat) => {
       const spentThisMonth = transactions
@@ -401,10 +418,12 @@ export const mockApiClient: ApiClientInterface = {
   },
 
   async createCategory(input) {
+    const currentUser = this.getCurrentUser();
+    const userId = currentUser?.id || DEMO_USER.id;
     const categories = getStoredCategories();
     const newCat: Category = {
       id: `cat-${Date.now()}`,
-      userId: DEMO_USER.id,
+      userId,
       name: input.name,
       type: input.type,
       color: input.color || '#3b82f6',
@@ -424,8 +443,10 @@ export const mockApiClient: ApiClientInterface = {
   },
 
   async getStats(): Promise<FinancialStats> {
-    const transactions = getStoredTransactions();
-    const categories = getStoredCategories();
+    const currentUser = this.getCurrentUser();
+    const userId = currentUser?.id || DEMO_USER.id;
+    const transactions = getStoredTransactions().filter((t) => t.userId === userId);
+    const categories = getStoredCategories().filter((c) => c.userId === userId);
 
     const monthlyIncome = transactions
       .filter((t) => t.type === 'income')
