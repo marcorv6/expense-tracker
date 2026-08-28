@@ -41,20 +41,49 @@ export function SpendingCharts({
   const [timeframe, setTimeframe] = useState<'week' | 'month' | 'year'>('month');
   const [selectedIndex, setSelectedIndex] = useState<number>(3);
 
-  // Fallback points if monthlyTrends is empty
-  const defaultData = [
-    { month: 'Jun', expense: 0 },
-    { month: 'Jul', expense: 0 },
-    { month: 'Aug', expense: 0 },
-    { month: 'Sep', expense: 0 },
-    { month: 'Oct', expense: 0 },
-    { month: 'Nov', expense: 0 },
-  ];
+  const getPointsForTimeframe = () => {
+    if (timeframe === 'week') {
+      const days = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
+      return days.map((dayName) => {
+        const dayTxs = transactions.filter((t) => {
+          if (t.type !== 'expense') return false;
+          const d = new Date(t.date);
+          const name = d.toLocaleDateString('en-US', { weekday: 'short' });
+          return name === dayName;
+        });
+        const expense = dayTxs.reduce((sum, t) => sum + t.amount, 0);
+        return { month: dayName, expense };
+      });
+    }
 
-  const sourceData = monthlyTrends && monthlyTrends.length > 0
-    ? monthlyTrends.slice(-6).map((item) => ({ month: item.month, expense: item.expense }))
-    : defaultData;
+    if (timeframe === 'year') {
+      const years = ['2021', '2022', '2023', '2024', '2025', '2026'];
+      return years.map((yStr) => {
+        const yearTxs = transactions.filter((t) => {
+          if (t.type !== 'expense') return false;
+          return new Date(t.date).getFullYear().toString() === yStr;
+        });
+        const expense = yearTxs.reduce((sum, t) => sum + t.amount, 0);
+        return { month: yStr, expense };
+      });
+    }
 
+    // Default 'month'
+    if (monthlyTrends && monthlyTrends.length > 0) {
+      return monthlyTrends.slice(-6).map((item) => ({ month: item.month, expense: item.expense }));
+    }
+
+    return [
+      { month: 'Jun', expense: 0 },
+      { month: 'Jul', expense: 0 },
+      { month: 'Aug', expense: 0 },
+      { month: 'Sep', expense: 0 },
+      { month: 'Oct', expense: 0 },
+      { month: 'Nov', expense: 0 },
+    ];
+  };
+
+  const sourceData = getPointsForTimeframe();
   const maxExpense = Math.max(...sourceData.map((d) => d.expense), 100);
 
   // Compute dynamic (x, y) coordinates proportional to actual expense data
