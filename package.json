@@ -6,7 +6,8 @@
     "dev": "next dev",
     "build": "BASELINE_BROWSER_MAPPING_IGNORE_OLD_DATA=true BROWSERSLIST_IGNORE_OLD_DATA=true next build",
     "start": "next start",
-    "lint": "eslint"
+    "lint": "eslint",
+    "db:migrate": "node scripts/migrate.cjs"
   },
   "dependencies": {
     "@neondatabase/serverless": "^1.1.0",
