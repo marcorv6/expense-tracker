@@ -1,0 +1,42 @@
+{
+  "project": "SpendFlow",
+  "version": "1.0.0",
+  "harness_roles": ["orchestrator", "builder", "tester", "committer"],
+  "features": [
+    {
+      "id": "FEAT-001",
+      "title": "Form Resetting & Vitest Testing Infrastructure",
+      "status": "completed",
+      "assigned_role": "tester",
+      "verified": true
+    },
+    {
+      "id": "FEAT-002",
+      "title": "General Default Expense Category",
+      "status": "completed",
+      "assigned_role": "builder",
+      "verified": true
+    },
+    {
+      "id": "FEAT-003",
+      "title": "Future Date Auto-Pending & Auto-Clear Transition",
+      "status": "completed",
+      "assigned_role": "builder",
+      "verified": true
+    },
+    {
+      "id": "FEAT-004",
+      "title": "Custom Fintech DatePicker Component",
+      "status": "completed",
+      "assigned_role": "builder",
+      "verified": true
+    },
+    {
+      "id": "FEAT-005",
+      "title": "4-Agent Development Harness & Role Specs",
+      "status": "completed",
+      "assigned_role": "orchestrator",
+      "verified": true
+    }
+  ]
+}
