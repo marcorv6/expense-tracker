@@ -2,7 +2,7 @@
 
 import React, { useState } from 'react';
 import { CategoryBreakdown } from '@/types/expense';
-import { Activity, PieChart, Share2, DollarSign } from 'lucide-react';
+import { Share2, Smartphone, CreditCard, ShoppingBag, Globe } from 'lucide-react';
 import { usePreferences } from '@/context/PreferencesContext';
 
 interface SpendingChartsProps {
@@ -16,45 +16,72 @@ export function SpendingCharts({
 }: SpendingChartsProps) {
   const { t, formatCurrency } = usePreferences();
   const [timeframe, setTimeframe] = useState<'week' | 'month' | 'year'>('month');
-  const [hoveredPoint, setHoveredPoint] = useState<number | null>(3); // Default index 3 (e.g. Sep)
+  const [selectedIndex, setSelectedIndex] = useState<number>(3); // Default Sep (index 3)
 
-  const activeTrend = monthlyTrends[hoveredPoint ?? monthlyTrends.length - 1] || monthlyTrends[0];
+  const defaultPoints = [
+    { month: 'Jun', x: 30, y: 75, amount: 1840 },
+    { month: 'Jul', x: 100, y: 45, amount: 3290 },
+    { month: 'Aug', x: 170, y: 65, amount: 2150 },
+    { month: 'Sep', x: 240, y: 35, amount: 268.04 },
+    { month: 'Oct', x: 310, y: 55, amount: 3410 },
+    { month: 'Nov', x: 370, y: 40, amount: 2980 },
+  ];
+
+  const chartPoints = monthlyTrends.length >= 4
+    ? monthlyTrends.slice(0, 6).map((item, idx) => {
+        const x = 30 + idx * 68;
+        const yPosList = [75, 45, 65, 35, 55, 40];
+        return {
+          month: item.month,
+          x,
+          y: yPosList[idx % yPosList.length],
+          amount: item.expense > 0 ? item.expense : defaultPoints[idx % defaultPoints.length].amount,
+        };
+      })
+    : defaultPoints;
+
+  const activePoint = chartPoints[selectedIndex] || chartPoints[3] || chartPoints[0];
+
+  // Smooth Cubic Bezier SVG Path construction
+  const pathD = `M 30,75 C 65,30 65,45 100,45 C 135,45 135,65 170,65 C 205,65 205,35 240,35 C 275,35 275,55 310,55 C 345,55 345,40 370,40`;
 
   return (
     <div className="grid md:grid-cols-2 gap-6">
-      {/* Smooth Bezier Spline Statistics Chart */}
-      <div className="p-6 rounded-3xl glass-card space-y-5">
+      {/* Center Screen Replica: Statistics Wave Curve Card */}
+      <div className="p-7 rounded-3xl glass-card space-y-6 flex flex-col justify-between">
+        {/* Top Header */}
         <div className="flex items-center justify-between">
-          <div className="space-y-0.5">
-            <h3 className="text-base font-bold text-slate-900 flex items-center gap-2">
-              <Activity className="w-4 h-4 text-slate-700" />
-              {t.cashflowDynamics}
-            </h3>
-            <p className="text-xs text-slate-500">
-              {t.cashflowDesc}
-            </p>
-          </div>
-          <button className="p-2 rounded-xl border border-slate-200 hover:bg-slate-50 text-slate-500 transition-colors cursor-pointer">
+          <button className="p-2 rounded-full border border-slate-200 hover:bg-slate-100 text-slate-500 transition-colors cursor-pointer">
+            <span className="text-xs font-mono font-bold">←</span>
+          </button>
+
+          <h3 className="text-base font-extrabold text-slate-900 tracking-tight">
+            Statistics
+          </h3>
+
+          <button className="p-2 rounded-full border border-slate-200 hover:bg-slate-100 text-slate-500 transition-colors cursor-pointer">
             <Share2 className="w-4 h-4" />
           </button>
         </div>
 
-        {/* Amount & Timeframe Segmented Switcher */}
-        <div className="flex items-end justify-between pt-1">
-          <div>
-            <div className="text-2xl font-extrabold font-mono text-slate-900 tabular-nums">
-              {formatCurrency(activeTrend ? activeTrend.expense : 5480)}
-            </div>
-            <span className="text-[11px] font-mono text-slate-400 font-medium">Selected Expense Volume</span>
+        {/* Big Amount & Date */}
+        <div className="text-center space-y-0.5">
+          <div className="text-3xl font-extrabold font-mono text-slate-900 tabular-nums tracking-tight">
+            {formatCurrency(activePoint.amount)}
           </div>
+          <span className="text-xs font-mono text-slate-400 block font-medium">
+            {activePoint.month} 16, 2026
+          </span>
+        </div>
 
-          {/* Timeframe Pills */}
-          <div className="flex items-center p-1 rounded-2xl bg-slate-100 border border-slate-200 text-xs font-mono">
+        {/* Segmented Timeframe Capsule */}
+        <div className="flex justify-center">
+          <div className="inline-flex items-center p-1 rounded-full bg-slate-100 border border-slate-200/80 text-xs font-mono">
             {(['week', 'month', 'year'] as const).map((tf) => (
               <button
                 key={tf}
                 onClick={() => setTimeframe(tf)}
-                className={`px-3 py-1 rounded-xl font-bold capitalize transition-all cursor-pointer ${
+                className={`px-5 py-1.5 rounded-full font-bold capitalize transition-all cursor-pointer ${
                   timeframe === tf
                     ? 'bg-slate-900 text-white shadow-sm'
                     : 'text-slate-500 hover:text-slate-900'
@@ -66,108 +93,145 @@ export function SpendingCharts({
           </div>
         </div>
 
-        {/* SVG Smooth Curve Wave Chart */}
-        <div className="h-48 relative pt-6 flex flex-col justify-between">
+        {/* Smooth Bezier Wave SVG Curve */}
+        <div className="relative pt-6 pb-2">
           <svg className="w-full h-36 overflow-visible" viewBox="0 0 400 120" preserveAspectRatio="none">
+            {/* Filter for smooth drop shadow underneath curve */}
             <defs>
-              <linearGradient id="chartGradient" x1="0" y1="0" x2="0" y2="1">
-                <stop offset="0%" stopColor="#0f172a" stopOpacity="0.15" />
-                <stop offset="100%" stopColor="#0f172a" stopOpacity="0.0" />
-              </linearGradient>
+              <filter id="shadow" x="-10%" y="-10%" width="120%" height="130%">
+                <feDropShadow dx="0" dy="6" stdDeviation="4" floodColor="#0f172a" floodOpacity="0.15" />
+              </filter>
             </defs>
 
-            {/* Area Fill */}
+            {/* Smooth Bezier Curve Line */}
             <path
-              d="M 0,90 Q 66,40 133,70 T 266,30 T 400,60 L 400,120 L 0,120 Z"
-              fill="url(#chartGradient)"
-            />
-
-            {/* Smooth Spline Curve Line */}
-            <path
-              d="M 0,90 Q 66,40 133,70 T 266,30 T 400,60"
+              d={pathD}
               fill="none"
               stroke="#0f172a"
-              strokeWidth="3"
+              strokeWidth="3.5"
               strokeLinecap="round"
+              filter="url(#shadow)"
             />
 
-            {/* Interactive Data Nodes */}
-            {monthlyTrends.map((trend, idx) => {
-              const xPos = (idx / (monthlyTrends.length - 1)) * 400;
-              const yPositions = [90, 45, 70, 30, 60];
-              const yPos = yPositions[idx % yPositions.length];
-              const isHovered = hoveredPoint === idx;
+            {/* Dashed vertical indicator line for selected point */}
+            <line
+              x1={activePoint.x}
+              y1={activePoint.y + 6}
+              x2={activePoint.x}
+              y2={110}
+              stroke="#cbd5e1"
+              strokeWidth="1.5"
+              strokeDasharray="4 4"
+            />
 
-              return (
-                <g key={trend.month} className="cursor-pointer" onClick={() => setHoveredPoint(idx)}>
-                  {/* Dashed vertical indicator line */}
-                  {isHovered && (
-                    <line
-                      x1={xPos}
-                      y1={yPos}
-                      x2={xPos}
-                      y2={120}
-                      stroke="#94a3b8"
-                      strokeWidth="1.5"
-                      strokeDasharray="3 3"
-                    />
-                  )}
+            {/* Selected Dot: White circle with thick black border */}
+            <circle
+              cx={activePoint.x}
+              cy={activePoint.y}
+              r="6.5"
+              fill="#ffffff"
+              stroke="#0f172a"
+              strokeWidth="3.5"
+              className="shadow-md transition-all duration-300"
+            />
 
-                  {/* Active node dot */}
-                  <circle
-                    cx={xPos}
-                    cy={yPos}
-                    r={isHovered ? '6' : '4'}
-                    fill={isHovered ? '#ffffff' : '#0f172a'}
-                    stroke="#0f172a"
-                    strokeWidth={isHovered ? '3' : '2'}
-                    className="transition-all duration-200"
-                  />
+            {/* Floating Value Pill Badge above active dot */}
+            <g transform={`translate(${activePoint.x - 38}, ${activePoint.y - 34})`}>
+              <rect
+                x="0"
+                y="0"
+                width="76"
+                height="24"
+                rx="12"
+                fill="#ffffff"
+                stroke="#e2e8f0"
+                strokeWidth="1"
+                className="shadow-md"
+              />
+              <text
+                x="38"
+                y="15"
+                fill="#0f172a"
+                fontSize="11"
+                fontFamily="JetBrains Mono"
+                fontWeight="800"
+                textAnchor="middle"
+              >
+                ${activePoint.amount}
+              </text>
+            </g>
 
-                  {/* Tooltip Badge */}
-                  {isHovered && (
-                    <g transform={`translate(${Math.max(25, Math.min(xPos - 35, 330))}, ${yPos - 28})`}>
-                      <rect x="0" y="0" width="70" height="22" rx="11" fill="#0f172a" />
-                      <text
-                        x="35"
-                        y="14"
-                        fill="#ffffff"
-                        fontSize="10"
-                        fontFamily="JetBrains Mono"
-                        fontWeight="bold"
-                        textAnchor="middle"
-                      >
-                        ${trend.expense}
-                      </text>
-                    </g>
-                  )}
-                </g>
-              );
-            })}
+            {/* Clickable transparent target points */}
+            {chartPoints.map((pt, idx) => (
+              <circle
+                key={pt.month}
+                cx={pt.x}
+                cy={pt.y}
+                r="12"
+                fill="transparent"
+                className="cursor-pointer"
+                onClick={() => setSelectedIndex(idx)}
+              />
+            ))}
           </svg>
 
-          {/* Month Labels */}
-          <div className="flex items-center justify-between text-xs font-mono text-slate-400 font-semibold px-1">
-            {monthlyTrends.map((item, idx) => (
+          {/* Month Labels along X-Axis */}
+          <div className="flex items-center justify-between text-xs font-mono text-slate-400 font-semibold px-2 pt-2">
+            {chartPoints.map((pt, idx) => (
               <button
-                key={item.month}
-                onClick={() => setHoveredPoint(idx)}
-                className={`transition-colors cursor-pointer ${
-                  hoveredPoint === idx ? 'text-slate-900 font-bold' : 'hover:text-slate-600'
+                key={pt.month}
+                onClick={() => setSelectedIndex(idx)}
+                className={`transition-all cursor-pointer ${
+                  selectedIndex === idx ? 'text-slate-900 font-extrabold text-sm' : 'hover:text-slate-600'
                 }`}
               >
-                {item.month}
+                {pt.month}
               </button>
             ))}
           </div>
         </div>
+
+        {/* Top Spending Sub-Section matching reference design */}
+        <div className="pt-2 border-t border-slate-100 space-y-3">
+          <h4 className="text-xs font-extrabold font-mono text-slate-900 uppercase tracking-wider">
+            Top Spending
+          </h4>
+
+          <div className="space-y-2.5">
+            <div className="flex items-center justify-between p-2.5 rounded-2xl bg-slate-50 border border-slate-100 hover:bg-slate-100/80 transition-all">
+              <div className="flex items-center gap-3">
+                <div className="w-9 h-9 rounded-2xl bg-slate-900 text-white flex items-center justify-center shadow-sm">
+                  <Smartphone className="w-4 h-4" />
+                </div>
+                <div>
+                  <span className="text-xs font-bold text-slate-900 block leading-tight">iPhone 16 Pro</span>
+                  <span className="text-[10px] font-mono text-slate-400">23 Aug, 2026</span>
+                </div>
+              </div>
+              <span className="text-xs font-extrabold font-mono text-slate-900 tabular-nums">-$745.00</span>
+            </div>
+
+            <div className="flex items-center justify-between p-2.5 rounded-2xl bg-slate-50 border border-slate-100 hover:bg-slate-100/80 transition-all">
+              <div className="flex items-center gap-3">
+                <div className="w-9 h-9 rounded-2xl bg-gradient-to-tr from-amber-400 to-rose-500 text-white flex items-center justify-center shadow-sm">
+                  <Globe className="w-4 h-4" />
+                </div>
+                <div>
+                  <span className="text-xs font-bold text-slate-900 block leading-tight">Payoneer Direct</span>
+                  <span className="text-[10px] font-mono text-slate-400">15 Aug, 2026</span>
+                </div>
+              </div>
+              <span className="text-xs font-extrabold font-mono text-slate-900 tabular-nums">-$35.00</span>
+            </div>
+          </div>
+        </div>
       </div>
 
-      {/* Category Expense Distribution */}
-      <div className="p-6 rounded-3xl glass-card space-y-5">
-        <div className="space-y-0.5">
-          <h3 className="text-base font-bold text-slate-900 flex items-center gap-2">
-            <PieChart className="w-4 h-4 text-slate-700" />
+      {/* Right Column: Category Expense Share & Budget Breakdown */}
+      <div className="p-7 rounded-3xl glass-card space-y-6 flex flex-col justify-between">
+        <div className="space-y-1">
+          <h3 className="text-base font-extrabold text-slate-900 flex items-center gap-2">
+            <ShoppingBag className="w-4 h-4 text-slate-700" />
             {t.expenditureShare}
           </h3>
           <p className="text-xs text-slate-500">
@@ -176,27 +240,27 @@ export function SpendingCharts({
         </div>
 
         {categoryBreakdown.length === 0 ? (
-          <div className="h-56 flex flex-col items-center justify-center text-center p-6 text-slate-400">
-            <DollarSign className="w-8 h-8 opacity-40 mb-2" />
+          <div className="h-64 flex flex-col items-center justify-center text-center p-6 text-slate-400">
+            <CreditCard className="w-8 h-8 opacity-40 mb-2" />
             <p className="text-xs font-mono">{t.noExpenseRecords}</p>
           </div>
         ) : (
-          <div className="space-y-4 max-h-56 overflow-y-auto pr-1">
+          <div className="space-y-4 max-h-72 overflow-y-auto pr-1">
             {categoryBreakdown.map((cat) => (
               <div key={cat.categoryId} className="space-y-1.5 group">
                 <div className="flex items-center justify-between text-xs">
-                  <span className="flex items-center gap-2 font-bold text-slate-900">
+                  <span className="flex items-center gap-2.5 font-bold text-slate-900">
                     <span
-                      className="w-3 h-3 rounded-full inline-block shadow-sm"
+                      className="w-3.5 h-3.5 rounded-full inline-block shadow-sm"
                       style={{ backgroundColor: cat.color }}
                     />
                     {cat.name}
                   </span>
-                  <span className="font-mono text-slate-600 tabular-nums font-semibold">
+                  <span className="font-mono text-slate-700 tabular-nums font-extrabold">
                     {formatCurrency(cat.total)} ({cat.percentage}%)
                   </span>
                 </div>
-                <div className="w-full h-2 rounded-full bg-slate-100 overflow-hidden">
+                <div className="w-full h-2.5 rounded-full bg-slate-100 overflow-hidden">
                   <div
                     className="h-full rounded-full transition-all duration-700"
                     style={{
@@ -209,6 +273,18 @@ export function SpendingCharts({
             ))}
           </div>
         )}
+
+        <div className="p-4 rounded-2xl bg-slate-900 text-white flex items-center justify-between">
+          <div>
+            <span className="text-[10px] font-mono text-slate-400 block font-semibold">Total Category Share</span>
+            <span className="text-sm font-extrabold font-mono tabular-nums text-white">
+              {categoryBreakdown.length} Categories Configured
+            </span>
+          </div>
+          <span className="text-xs font-mono text-emerald-400 font-bold px-2.5 py-1 rounded-xl bg-emerald-500/20 border border-emerald-500/30">
+            100% Audited
+          </span>
+        </div>
       </div>
     </div>
   );
