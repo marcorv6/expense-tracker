@@ -10,6 +10,7 @@ import { TransactionList } from '@/components/TransactionList';
 import { TransactionModal } from '@/components/TransactionModal';
 import { CategoryModal } from '@/components/CategoryModal';
 import { AuthModal } from '@/components/AuthModal';
+import { OnboardingTutorial } from '@/components/OnboardingTutorial';
 import { Footer } from '@/components/Footer';
 import { useAuth } from '@/context/AuthContext';
 import { usePreferences } from '@/context/PreferencesContext';
@@ -45,6 +46,17 @@ export default function DashboardPage() {
   const [txModalDefaultType, setTxModalDefaultType] = useState<'expense' | 'income'>('expense');
   const [editingTransaction, setEditingTransaction] = useState<TransactionItem | null>(null);
   const [isCatModalOpen, setIsCatModalOpen] = useState(false);
+  const [isTutorialOpen, setIsTutorialOpen] = useState(false);
+
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      const seen = localStorage.getItem('spendflow_tutorial_seen');
+      if (!seen) {
+        const timer = setTimeout(() => setIsTutorialOpen(true), 100);
+        return () => clearTimeout(timer);
+      }
+    }
+  }, []);
 
   const fetchDashboardData = async () => {
     if (!isAuthenticated) return;
@@ -380,6 +392,16 @@ export default function DashboardPage() {
         categories={categories}
         onCreateCategory={handleCreateCategory}
         onDeleteCategory={handleDeleteCategory}
+      />
+
+      <OnboardingTutorial
+        isOpen={isTutorialOpen}
+        onClose={() => {
+          setIsTutorialOpen(false);
+          if (typeof window !== 'undefined') {
+            localStorage.setItem('spendflow_tutorial_seen', 'true');
+          }
+        }}
       />
 
       {/* Mandatory Auth Modal Overlay */}

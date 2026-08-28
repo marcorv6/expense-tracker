@@ -171,11 +171,10 @@ export function SpendingCharts({
               />
               <text
                 x="38"
-                y="15"
+                y="16"
                 fill="#34d399"
                 fontSize="11"
-                fontFamily="JetBrains Mono"
-                fontWeight="800"
+                style={{ fontFamily: 'Plus Jakarta Sans, -apple-system, sans-serif', fontWeight: 800 }}
                 textAnchor="middle"
               >
                 ${activePoint.amount}

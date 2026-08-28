@@ -5,6 +5,7 @@ import { useAuth } from '@/context/AuthContext';
 import { usePreferences } from '@/context/PreferencesContext';
 import { SupportedCurrency, SupportedLanguage } from '@/lib/i18n/translations';
 import { AuthModal } from './AuthModal';
+import { OnboardingTutorial } from './OnboardingTutorial';
 import {
   Wallet,
   Sparkles,
@@ -14,6 +15,7 @@ import {
   ArrowUpRight,
   Globe,
   Coins,
+  HelpCircle,
 } from 'lucide-react';
 
 interface HeaderProps {
@@ -25,13 +27,14 @@ export function Header({ onOpenTransactionModal }: HeaderProps) {
   const { user, isAuthenticated, logout, loginAsDemoGuest } = useAuth();
   const { currency, setCurrency, language, setLanguage, t } = usePreferences();
   const [isAuthModalOpen, setIsAuthModalOpen] = useState(false);
+  const [isTutorialOpen, setIsTutorialOpen] = useState(false);
 
   return (
     <header className="sticky top-0 z-40 w-full border-b border-slate-200/80 bg-white/80 backdrop-blur-xl">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between gap-4">
         {/* Brand Logo & Greeting */}
         <div className="flex items-center gap-3">
-          {/* New Electric Teal / Royal Violet Gradient Logo Badge */}
+          {/* Electric Teal / Royal Violet Gradient Logo Badge */}
           <div className="w-10 h-10 rounded-2xl bg-gradient-to-tr from-emerald-400 via-cyan-500 to-violet-600 p-[2px] shadow-lg shadow-cyan-500/20">
             <div className="w-full h-full rounded-[14px] bg-slate-950 flex items-center justify-center text-white">
               <Wallet className="w-5 h-5 text-cyan-400" />
@@ -61,6 +64,16 @@ export function Header({ onOpenTransactionModal }: HeaderProps) {
 
         {/* Currency & Language Selectors & User Controls */}
         <div className="flex items-center gap-2 sm:gap-3">
+          {/* Onboarding Help Tour Button */}
+          <button
+            onClick={() => setIsTutorialOpen(true)}
+            className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl border border-slate-200 bg-slate-50 hover:bg-slate-100 text-xs font-mono font-bold text-slate-700 transition-all shadow-sm cursor-pointer"
+            title="Take Tour & Help Tutorial"
+          >
+            <HelpCircle className="w-3.5 h-3.5 text-emerald-600" />
+            <span className="hidden md:inline">Tutorial</span>
+          </button>
+
           {/* Currency Selector */}
           <div className="relative flex items-center">
             <Coins className="w-3.5 h-3.5 text-slate-400 absolute left-3 pointer-events-none" />
@@ -173,6 +186,7 @@ export function Header({ onOpenTransactionModal }: HeaderProps) {
       </div>
 
       <AuthModal isOpen={isAuthModalOpen} onClose={() => setIsAuthModalOpen(false)} />
+      <OnboardingTutorial isOpen={isTutorialOpen} onClose={() => setIsTutorialOpen(false)} />
     </header>
   );
 }
