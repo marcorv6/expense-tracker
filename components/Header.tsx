@@ -31,8 +31,11 @@ export function Header({ onOpenTransactionModal }: HeaderProps) {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between gap-4">
         {/* Brand Logo & Greeting */}
         <div className="flex items-center gap-3">
-          <div className="w-10 h-10 rounded-2xl bg-slate-900 text-white flex items-center justify-center shadow-lg shadow-slate-900/10">
-            <Wallet className="w-5 h-5 text-emerald-400" />
+          {/* New Electric Teal / Royal Violet Gradient Logo Badge */}
+          <div className="w-10 h-10 rounded-2xl bg-gradient-to-tr from-emerald-400 via-cyan-500 to-violet-600 p-[2px] shadow-lg shadow-cyan-500/20">
+            <div className="w-full h-full rounded-[14px] bg-slate-950 flex items-center justify-center text-white">
+              <Wallet className="w-5 h-5 text-cyan-400" />
+            </div>
           </div>
 
           <div>
@@ -40,14 +43,14 @@ export function Header({ onOpenTransactionModal }: HeaderProps) {
               <span className="font-extrabold text-lg tracking-tight text-slate-900 font-sans">
                 {t.appName}
               </span>
-              <span className="text-[10px] font-mono px-2.5 py-0.5 rounded-full bg-slate-100 text-slate-700 font-bold border border-slate-200">
+              <span className="text-[10px] font-mono px-2.5 py-0.5 rounded-full bg-cyan-50 text-cyan-700 font-bold border border-cyan-200">
                 {t.fintechTag}
               </span>
             </div>
             <div className="flex items-center gap-1.5 text-xs text-slate-500">
               <span className="relative flex h-2 w-2">
-                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
-                <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"></span>
+                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-cyan-400 opacity-75"></span>
+                <span className="relative inline-flex rounded-full h-2 w-2 bg-cyan-500"></span>
               </span>
               <span className="text-[11px] font-mono text-slate-500 font-medium">
                 {user ? `Good Day, ${user.name}` : t.encryptedSession}
@@ -132,7 +135,7 @@ export function Header({ onOpenTransactionModal }: HeaderProps) {
                   <span className="text-xs font-bold block text-slate-900 leading-tight">
                     {user?.name}
                   </span>
-                  <span className="text-[10px] text-slate-500 font-mono block font-semibold">
+                  <span className="text-[10px] text-cyan-600 font-mono block font-semibold">
                     {currency} Wallet
                   </span>
                 </div>
