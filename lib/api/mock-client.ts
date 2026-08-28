@@ -481,17 +481,33 @@ export const mockApiClient: ApiClientInterface = {
       .filter((c) => c.total > 0)
       .sort((a, b) => b.total - a.total);
 
-    // Monthly trends sample
-    const monthlyTrends = [
-      { month: 'Apr', income: 6200, expense: 2800 },
-      { month: 'May', income: 7100, expense: 3100 },
-      { month: 'Jun', income: 6800, expense: 2950 },
-      { month: 'Jul', income: 7400, expense: 3050 },
-      { month: 'Aug', income: monthlyIncome, expense: monthlyExpenses },
-    ];
+    const isDemo = userId === DEMO_USER.id;
+
+    // Calculate actual monthly trends for this user
+    const monthNames = ['Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep'];
+    const monthlyTrends = isDemo
+      ? [
+          { month: 'Apr', income: 6200, expense: 2800 },
+          { month: 'May', income: 7100, expense: 3100 },
+          { month: 'Jun', income: 6800, expense: 2950 },
+          { month: 'Jul', income: 7400, expense: 3050 },
+          { month: 'Aug', income: monthlyIncome, expense: monthlyExpenses },
+        ]
+      : monthNames.map((m) => {
+          const monthTxs = transactions.filter((t) => {
+            const dateObj = new Date(t.date);
+            const mName = dateObj.toLocaleString('en-US', { month: 'short' });
+            return mName === m;
+          });
+          const inc = monthTxs.filter((t) => t.type === 'income').reduce((s, t) => s + t.amount, 0);
+          const exp = monthTxs.filter((t) => t.type === 'expense').reduce((s, t) => s + t.amount, 0);
+          return { month: m, income: inc, expense: exp };
+        });
+
+    const totalBalance = isDemo ? 18450.00 + netSavings : netSavings;
 
     return {
-      totalBalance: 18450.00 + netSavings,
+      totalBalance,
       monthlyIncome,
       monthlyExpenses,
       netSavings,

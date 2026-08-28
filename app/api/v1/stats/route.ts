@@ -52,21 +52,35 @@ export async function GET(req: Request) {
       };
     });
 
+    // Compute actual monthly trends from user's database transactions
+    const trendRows = await query<{ month_name: string; type: 'income' | 'expense'; total: string }>(
+      `SELECT TO_CHAR(date, 'Mon') AS month_name, type, COALESCE(SUM(amount), 0) AS total
+       FROM transactions
+       WHERE user_id = $1
+       GROUP BY TO_CHAR(date, 'Mon'), type`,
+      [user.userId]
+    );
+
+    const monthNames = ['Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep'];
+    const monthlyTrends = monthNames.map((m) => {
+      const incRow = trendRows.find((r) => r.month_name === m && r.type === 'income');
+      const expRow = trendRows.find((r) => r.month_name === m && r.type === 'expense');
+      return {
+        month: m,
+        income: parseFloat(incRow?.total || '0'),
+        expense: parseFloat(expRow?.total || '0'),
+      };
+    });
+
     return NextResponse.json({
-      totalBalance: 15000.00 + netSavings,
+      totalBalance: netSavings,
       monthlyIncome,
       monthlyExpenses,
       netSavings,
       savingsRate: Number(savingsRate.toFixed(1)),
       pendingTransactionsCount,
       categoryBreakdown,
-      monthlyTrends: [
-        { month: 'Apr', income: 6200, expense: 2800 },
-        { month: 'May', income: 7100, expense: 3100 },
-        { month: 'Jun', income: 6800, expense: 2950 },
-        { month: 'Jul', income: 7400, expense: 3050 },
-        { month: 'Aug', income: monthlyIncome, expense: monthlyExpenses },
-      ],
+      monthlyTrends,
     });
   } catch (error: unknown) {
     return NextResponse.json({ error: (error as Error).message || 'Failed to fetch financial stats' }, { status: 500 });
