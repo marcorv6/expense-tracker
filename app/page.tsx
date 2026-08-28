@@ -18,7 +18,6 @@ import {
   Wallet,
   ArrowUpRight,
   ArrowDownLeft,
-  PiggyBank,
 } from 'lucide-react';
 import { toast } from 'sonner';
 
@@ -208,12 +207,12 @@ export default function DashboardPage() {
 
   if (!isMounted) {
     return (
-      <div className="min-h-screen bg-[#06070a] text-foreground flex items-center justify-center font-sans">
-        <div className="flex items-center gap-3 text-xs font-mono text-slate-400 animate-pulse">
-          <div className="w-8 h-8 rounded-xl bg-indigo-500/20 border border-indigo-500/30 flex items-center justify-center">
-            <Wallet className="w-4 h-4 text-indigo-400" />
+      <div className="min-h-screen bg-[#f0f2f6] text-slate-900 flex items-center justify-center font-sans">
+        <div className="flex items-center gap-3 text-xs font-mono text-slate-500 animate-pulse">
+          <div className="w-8 h-8 rounded-2xl bg-slate-900 text-white flex items-center justify-center">
+            <Wallet className="w-4 h-4 text-emerald-400" />
           </div>
-          <span>Initializing SpendFlow Encrypted Workspace...</span>
+          <span>Initializing SpendFlow Workspace...</span>
         </div>
       </div>
     );
@@ -242,15 +241,14 @@ export default function DashboardPage() {
 
           {/* Main Dashboard Content */}
           <div className="flex-1 space-y-8">
-            {/* KPI Metrics Header Cards */}
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+            {/* KPI Metrics & Virtual Credit Card Header */}
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
+              {/* Virtual Credit Card Display */}
               <MetricCard
                 title={t.netLiquidity}
-                amount={stats?.totalBalance || 0}
-                subtext={t.checkingSavings}
+                amount={stats?.totalBalance || 5480}
                 icon={Wallet}
-                trend={{ value: 4.8, isPositive: true }}
-                badgeColor="text-blue-400 bg-blue-500/10 border-blue-500/20"
+                isVirtualCard={true}
               />
 
               <MetricCard
@@ -258,8 +256,8 @@ export default function DashboardPage() {
                 amount={stats?.monthlyIncome || 0}
                 subtext={t.salaryEarnings}
                 icon={ArrowUpRight}
-                trend={{ value: 12.5, isPositive: true }}
-                badgeColor="text-emerald-400 bg-emerald-500/10 border-emerald-500/20"
+                trend={{ value: 24, isPositive: true }}
+                badgeColor="text-emerald-700 bg-emerald-50 border-emerald-200"
               />
 
               <MetricCard
@@ -267,16 +265,8 @@ export default function DashboardPage() {
                 amount={stats?.monthlyExpenses || 0}
                 subtext={t.operatingExpenses}
                 icon={ArrowDownLeft}
-                trend={{ value: -3.2, isPositive: true }}
-                badgeColor="text-rose-400 bg-rose-500/10 border-rose-500/20"
-              />
-
-              <MetricCard
-                title={t.savingsRate}
-                amount={stats?.netSavings || 0}
-                subtext={`${stats?.savingsRate || 0}% ${t.netCashSaved}`}
-                icon={PiggyBank}
-                badgeColor="text-indigo-400 bg-indigo-500/10 border-indigo-500/20"
+                trend={{ value: -42, isPositive: false }}
+                badgeColor="text-rose-700 bg-rose-50 border-rose-200"
               />
             </div>
 

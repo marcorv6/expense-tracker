@@ -46,25 +46,22 @@ export function AuthModal({ isOpen, onClose, forceAuth = false }: AuthModalProps
 
   return (
     <div
-      className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/85 backdrop-blur-xl animate-in fade-in"
+      className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/70 backdrop-blur-md animate-in fade-in"
       onClick={(e) => {
         if (!isLocked && e.target === e.currentTarget) {
           onClose();
         }
       }}
     >
-      <div className="w-full max-w-sm rounded-2xl bg-slate-900/95 border border-white/10 shadow-2xl p-6 space-y-6 relative overflow-hidden">
-        {/* Glow background */}
-        <div className="absolute -top-10 -right-10 w-36 h-36 bg-emerald-500/20 blur-3xl rounded-full pointer-events-none" />
-
-        <div className="flex items-center justify-between border-b border-white/10 pb-4 relative z-10">
+      <div className="w-full max-w-sm rounded-3xl bg-white border border-slate-200 shadow-2xl p-6 space-y-6 relative overflow-hidden">
+        <div className="flex items-center justify-between border-b border-slate-100 pb-4">
           <div>
-            <h3 className="text-lg font-extrabold text-white flex items-center gap-2">
-              {isLocked && <Lock className="w-4 h-4 text-emerald-400" />}
+            <h3 className="text-lg font-extrabold text-slate-900 flex items-center gap-2">
+              {isLocked && <Lock className="w-4 h-4 text-emerald-600" />}
               {isRegister ? 'Create Account' : 'Sign In Required'}
             </h3>
             {isLocked && (
-              <p className="text-[11px] font-mono text-emerald-400">
+              <p className="text-[11px] font-mono text-emerald-700 font-semibold">
                 Please authenticate or click below to enter Demo mode.
               </p>
             )}
@@ -72,7 +69,7 @@ export function AuthModal({ isOpen, onClose, forceAuth = false }: AuthModalProps
           {!isLocked && (
             <button
               onClick={onClose}
-              className="p-1.5 rounded-lg border border-white/10 text-slate-400 hover:text-white transition-colors cursor-pointer"
+              className="p-2 rounded-full border border-slate-200 text-slate-400 hover:text-slate-900 transition-colors cursor-pointer"
             >
               <X className="w-4 h-4" />
             </button>
@@ -83,72 +80,72 @@ export function AuthModal({ isOpen, onClose, forceAuth = false }: AuthModalProps
         <button
           onClick={handleDemoClick}
           disabled={isLoading}
-          className="w-full py-3.5 px-4 rounded-xl bg-gradient-to-r from-emerald-600 via-teal-600 to-emerald-500 hover:from-emerald-500 hover:to-teal-400 text-white font-mono font-extrabold text-xs transition-all shadow-lg shadow-emerald-600/30 flex items-center justify-center gap-2 cursor-pointer active:scale-95 relative z-10"
+          className="w-full py-3.5 px-4 rounded-2xl bg-emerald-600 hover:bg-emerald-700 text-white font-mono font-extrabold text-xs transition-all shadow-md shadow-emerald-600/20 flex items-center justify-center gap-2 cursor-pointer active:scale-95"
         >
           <Sparkles className="w-4 h-4 text-emerald-200" />
           <span>Instant 1-Click Recruiter Demo</span>
         </button>
 
-        <div className="relative flex items-center justify-center relative z-10">
-          <div className="border-t border-white/10 w-full" />
-          <span className="absolute px-3 bg-slate-900 text-[10px] font-mono text-slate-400 uppercase font-semibold">
+        <div className="relative flex items-center justify-center">
+          <div className="border-t border-slate-200 w-full" />
+          <span className="absolute px-3 bg-white text-[10px] font-mono text-slate-400 uppercase font-bold">
             Or Account Credentials
           </span>
         </div>
 
-        <form onSubmit={handleSubmit} className="space-y-4 relative z-10">
+        <form onSubmit={handleSubmit} className="space-y-4">
           {isRegister && (
             <div className="space-y-1">
-              <label className="text-xs font-mono text-slate-400">Full Name</label>
+              <label className="text-xs font-mono font-bold text-slate-600">Full Name</label>
               <input
                 type="text"
                 required
                 placeholder="Alex Vance"
                 value={name}
                 onChange={(e) => setName(e.target.value)}
-                className="w-full px-3.5 py-2 text-xs rounded-xl border border-white/10 bg-slate-950 text-white focus:ring-2 focus:ring-indigo-500 focus:outline-none"
+                className="w-full px-3.5 py-2 text-xs rounded-2xl border border-slate-200 bg-slate-50 text-slate-900 focus:ring-2 focus:ring-slate-900 focus:outline-none shadow-sm"
               />
             </div>
           )}
 
           <div className="space-y-1">
-            <label className="text-xs font-mono text-slate-400">Email Address</label>
+            <label className="text-xs font-mono font-bold text-slate-600">Email Address</label>
             <input
               type="email"
               required
               placeholder="alex@example.com"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
-              className="w-full px-3.5 py-2 text-xs rounded-xl border border-white/10 bg-slate-950 text-white focus:ring-2 focus:ring-indigo-500 focus:outline-none font-mono"
+              className="w-full px-3.5 py-2 text-xs rounded-2xl border border-slate-200 bg-slate-50 text-slate-900 focus:ring-2 focus:ring-slate-900 focus:outline-none font-mono shadow-sm"
             />
           </div>
 
           <div className="space-y-1">
-            <label className="text-xs font-mono text-slate-400">Password</label>
+            <label className="text-xs font-mono font-bold text-slate-600">Password</label>
             <input
               type="password"
               required
               placeholder="••••••••"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
-              className="w-full px-3.5 py-2 text-xs rounded-xl border border-white/10 bg-slate-950 text-white focus:ring-2 focus:ring-indigo-500 focus:outline-none font-mono"
+              className="w-full px-3.5 py-2 text-xs rounded-2xl border border-slate-200 bg-slate-50 text-slate-900 focus:ring-2 focus:ring-slate-900 focus:outline-none font-mono shadow-sm"
             />
           </div>
 
           <button
             type="submit"
             disabled={isLoading}
-            className="w-full py-2.5 rounded-xl bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-500 hover:to-indigo-500 text-white font-mono font-bold text-xs shadow-lg shadow-indigo-600/25 transition-all cursor-pointer disabled:opacity-50 flex items-center justify-center gap-2"
+            className="w-full py-2.5 rounded-2xl bg-slate-900 hover:bg-slate-800 text-white font-mono font-bold text-xs shadow-md shadow-slate-900/10 transition-all cursor-pointer disabled:opacity-50 flex items-center justify-center gap-2"
           >
             {isRegister ? <UserPlus className="w-4 h-4" /> : <LogIn className="w-4 h-4" />}
             <span>{isRegister ? 'Register' : 'Sign In'}</span>
           </button>
         </form>
 
-        <div className="text-center pt-1 relative z-10">
+        <div className="text-center pt-1">
           <button
             onClick={() => setIsRegister(!isRegister)}
-            className="text-xs text-slate-400 hover:text-white font-mono transition-colors cursor-pointer"
+            className="text-xs text-slate-500 hover:text-slate-900 font-mono font-bold transition-colors cursor-pointer"
           >
             {isRegister
               ? 'Already have an account? Sign in'

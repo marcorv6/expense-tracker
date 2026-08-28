@@ -18,30 +18,30 @@ export function BudgetOverview({ categories, onOpenCategoryModal }: BudgetOvervi
   );
 
   return (
-    <div className="p-6 rounded-2xl glass-card space-y-6">
+    <div className="p-6 rounded-3xl glass-card space-y-5">
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-        <div className="space-y-1">
-          <h3 className="text-base font-bold text-foreground flex items-center gap-2">
-            <Target className="w-4 h-4 text-emerald-400" />
+        <div className="space-y-0.5">
+          <h3 className="text-base font-bold text-slate-900 flex items-center gap-2">
+            <Target className="w-4 h-4 text-emerald-600" />
             {t.budgetCapsTitle}
           </h3>
-          <p className="text-xs text-muted-foreground">
+          <p className="text-xs text-slate-500">
             {t.budgetCapsDesc}
           </p>
         </div>
 
         <button
           onClick={onOpenCategoryModal}
-          className="text-xs font-mono font-semibold px-3.5 py-1.5 rounded-xl bg-accent/80 border border-white/10 text-foreground hover:bg-accent transition-all cursor-pointer"
+          className="text-xs font-mono font-bold px-4 py-2 rounded-2xl bg-slate-100 border border-slate-200 text-slate-800 hover:bg-slate-200 transition-all cursor-pointer shadow-sm"
         >
           {t.setBudgetLimits}
         </button>
       </div>
 
       {budgetedCategories.length === 0 ? (
-        <div className="p-8 rounded-xl border border-dashed border-border/80 text-center space-y-2">
-          <Target className="w-8 h-8 text-muted-foreground mx-auto opacity-40" />
-          <p className="text-xs text-muted-foreground font-mono">
+        <div className="p-8 rounded-2xl border border-dashed border-slate-200 text-center space-y-2">
+          <Target className="w-8 h-8 text-slate-400 mx-auto opacity-50" />
+          <p className="text-xs text-slate-500 font-mono">
             {t.noBudgetsConfigured}
           </p>
         </div>
@@ -56,12 +56,12 @@ export function BudgetOverview({ categories, onOpenCategoryModal }: BudgetOvervi
             return (
               <div
                 key={cat.id}
-                className={`p-4 rounded-xl border transition-all duration-300 ${
+                className={`p-4 rounded-2xl border transition-all duration-300 ${
                   isExceeded
-                    ? 'border-rose-500/40 bg-rose-500/10 shadow-[0_0_15px_rgba(244,63,94,0.15)]'
+                    ? 'border-rose-300 bg-rose-50/50 shadow-sm'
                     : isWarning
-                    ? 'border-amber-500/40 bg-amber-500/10 shadow-[0_0_15px_rgba(245,158,11,0.15)]'
-                    : 'border-border/80 bg-accent/30 hover:border-white/20'
+                    ? 'border-amber-300 bg-amber-50/50 shadow-sm'
+                    : 'border-slate-100 bg-slate-50/50 hover:border-slate-300 shadow-sm'
                 }`}
               >
                 <div className="flex items-center justify-between mb-3">
@@ -70,38 +70,38 @@ export function BudgetOverview({ categories, onOpenCategoryModal }: BudgetOvervi
                       className="w-3 h-3 rounded-full inline-block shadow-sm"
                       style={{ backgroundColor: cat.color }}
                     />
-                    <span className="text-xs font-bold text-foreground truncate max-w-[130px]">
+                    <span className="text-xs font-bold text-slate-900 truncate max-w-[130px]">
                       {cat.name}
                     </span>
                   </div>
 
                   {isExceeded ? (
-                    <span className="inline-flex items-center gap-1 text-[10px] font-mono text-rose-400 font-bold px-2 py-0.5 rounded-full bg-rose-500/20 border border-rose-500/30">
-                      <AlertTriangle className="w-3 h-3" /> {t.exceeded}
+                    <span className="inline-flex items-center gap-1 text-[10px] font-mono text-rose-700 font-bold px-2.5 py-0.5 rounded-full bg-rose-100 border border-rose-200">
+                      <AlertTriangle className="w-3 h-3 text-rose-600" /> {t.exceeded}
                     </span>
                   ) : isWarning ? (
-                    <span className="inline-flex items-center gap-1 text-[10px] font-mono text-amber-400 font-bold px-2 py-0.5 rounded-full bg-amber-500/20 border border-amber-500/30">
-                      <AlertTriangle className="w-3 h-3" /> 80%+ {t.used}
+                    <span className="inline-flex items-center gap-1 text-[10px] font-mono text-amber-700 font-bold px-2.5 py-0.5 rounded-full bg-amber-100 border border-amber-200">
+                      <AlertTriangle className="w-3 h-3 text-amber-600" /> 80%+ {t.used}
                     </span>
                   ) : (
-                    <span className="inline-flex items-center gap-1 text-[10px] font-mono text-emerald-400 font-bold px-2 py-0.5 rounded-full bg-emerald-500/20 border border-emerald-500/30">
-                      <CheckCircle2 className="w-3 h-3" /> {t.onTrack}
+                    <span className="inline-flex items-center gap-1 text-[10px] font-mono text-emerald-700 font-bold px-2.5 py-0.5 rounded-full bg-emerald-100 border border-emerald-200">
+                      <CheckCircle2 className="w-3 h-3 text-emerald-600" /> {t.onTrack}
                     </span>
                   )}
                 </div>
 
                 <div className="space-y-1.5">
                   <div className="flex items-center justify-between text-xs font-mono tabular-nums">
-                    <span className="text-muted-foreground font-medium">
+                    <span className="text-slate-500 font-medium">
                       {formatCurrency(spent)} / {formatCurrency(cat.monthlyBudget)}
                     </span>
-                    <span className="font-bold text-foreground">{pct}%</span>
+                    <span className="font-bold text-slate-900">{pct}%</span>
                   </div>
 
-                  <div className="w-full h-2 rounded-full bg-slate-950 overflow-hidden">
+                  <div className="w-full h-2 rounded-full bg-slate-200 overflow-hidden">
                     <div
                       className={`h-full rounded-full transition-all duration-700 ${
-                        isExceeded ? 'bg-rose-500 shadow-[0_0_10px_#f43f5e]' : isWarning ? 'bg-amber-500 shadow-[0_0_10px_#f59e0b]' : 'bg-emerald-500 shadow-[0_0_10px_#10b981]'
+                        isExceeded ? 'bg-rose-500' : isWarning ? 'bg-amber-500' : 'bg-emerald-500'
                       }`}
                       style={{ width: `${Math.min(pct, 100)}%` }}
                     />

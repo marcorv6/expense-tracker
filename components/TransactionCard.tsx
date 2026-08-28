@@ -7,6 +7,8 @@ import {
   ArrowUpRight,
   Edit2,
   Trash2,
+  CheckCircle2,
+  Clock,
 } from 'lucide-react';
 import { usePreferences } from '@/context/PreferencesContext';
 
@@ -40,26 +42,25 @@ export function TransactionCard({
 
   return (
     <div
-      className={`p-4 rounded-xl border transition-all duration-200 flex items-center justify-between gap-4 group ${
+      className={`p-4 rounded-2xl border transition-all duration-200 flex items-center justify-between gap-4 group ${
         isSelected
-          ? 'bg-indigo-500/10 border-indigo-500/40 shadow-[0_0_15px_rgba(99,102,241,0.15)]'
-          : 'glass-card hover:border-white/20'
+          ? 'bg-slate-100 border-slate-400 shadow-sm'
+          : 'bg-white border-slate-100 shadow-sm hover:border-slate-300 hover:shadow-md'
       }`}
     >
-      {/* Checkbox & Category Icon */}
+      {/* Checkbox & Soft Merchant Circle Avatar */}
       <div className="flex items-center gap-3.5">
         <input
           type="checkbox"
           checked={isSelected}
           onChange={() => onSelectToggle(transaction.id)}
-          className="w-4 h-4 rounded border-border bg-slate-950 text-indigo-600 focus:ring-indigo-500 cursor-pointer"
+          className="w-4 h-4 rounded border-slate-300 text-slate-900 focus:ring-slate-900 cursor-pointer"
         />
 
         <div
-          className="w-10 h-10 rounded-xl flex items-center justify-center text-white font-bold flex-shrink-0 shadow-md transition-transform group-hover:scale-105"
+          className="w-10 h-10 rounded-2xl flex items-center justify-center text-white font-bold flex-shrink-0 shadow-sm transition-transform group-hover:scale-105"
           style={{
-            backgroundColor: transaction.categoryColor || (isExpense ? '#ef4444' : '#10b981'),
-            boxShadow: `0 0 12px ${transaction.categoryColor || '#6366f1'}40`,
+            backgroundColor: transaction.categoryColor || (isExpense ? '#0f172a' : '#10b981'),
           }}
         >
           {isExpense ? <ArrowDownLeft className="w-5 h-5 text-white" /> : <ArrowUpRight className="w-5 h-5 text-white" />}
@@ -68,15 +69,15 @@ export function TransactionCard({
         {/* Details */}
         <div className="space-y-0.5 max-w-[220px] sm:max-w-md">
           <div className="flex items-center gap-2">
-            <h4 className="text-xs sm:text-sm font-bold text-foreground truncate">
+            <h4 className="text-xs sm:text-sm font-bold text-slate-900 truncate">
               {transaction.description}
             </h4>
-            <span className="text-[10px] font-mono px-2 py-0.5 rounded-full border border-white/10 bg-accent/50 text-muted-foreground font-medium truncate">
+            <span className="text-[10px] font-mono px-2.5 py-0.5 rounded-full border border-slate-200 bg-slate-100 text-slate-600 font-semibold truncate">
               {transaction.categoryName || 'General'}
             </span>
           </div>
 
-          <div className="flex items-center gap-2.5 text-[11px] font-mono text-muted-foreground">
+          <div className="flex items-center gap-2.5 text-[11px] font-mono text-slate-400">
             <span>{formattedDate}</span>
             <span>•</span>
             <span className="capitalize">{transaction.paymentMethod.replace('_', ' ')}</span>
@@ -90,12 +91,12 @@ export function TransactionCard({
         </div>
       </div>
 
-      {/* Amount & Actions */}
+      {/* Amount & Status Actions */}
       <div className="flex items-center gap-4">
         <div className="text-right">
           <div
             className={`text-sm sm:text-base font-extrabold font-mono tabular-nums ${
-              isExpense ? 'text-foreground' : 'text-emerald-400'
+              isExpense ? 'text-slate-900' : 'text-emerald-600'
             }`}
           >
             {isExpense ? `-${formatCurrency(transaction.amount)}` : `+${formatCurrency(transaction.amount)}`}
@@ -103,18 +104,18 @@ export function TransactionCard({
 
           <button
             onClick={() => onStatusToggle(transaction)}
-            className={`inline-flex items-center gap-1 text-[10px] font-mono font-semibold cursor-pointer transition-colors ${
-              isCleared ? 'text-emerald-400' : 'text-amber-400'
+            className={`inline-flex items-center gap-1 text-[10px] font-mono font-bold cursor-pointer transition-colors ${
+              isCleared ? 'text-emerald-600' : 'text-amber-600'
             }`}
           >
             {isCleared ? (
               <>
-                <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
+                <CheckCircle2 className="w-3 h-3 text-emerald-500" />
                 <span>{t.cleared}</span>
               </>
             ) : (
               <>
-                <span className="w-1.5 h-1.5 rounded-full bg-amber-400" />
+                <Clock className="w-3 h-3 text-amber-500" />
                 <span>{t.pending}</span>
               </>
             )}
@@ -125,7 +126,7 @@ export function TransactionCard({
         <div className="flex items-center gap-1 opacity-70 group-hover:opacity-100 transition-opacity">
           <button
             onClick={() => onEdit(transaction)}
-            className="p-1.5 rounded-lg border border-border hover:bg-accent text-muted-foreground hover:text-foreground transition-colors cursor-pointer"
+            className="p-1.5 rounded-xl border border-slate-200 hover:bg-slate-100 text-slate-500 hover:text-slate-900 transition-colors cursor-pointer"
             title={t.edit}
           >
             <Edit2 className="w-3.5 h-3.5" />
@@ -133,7 +134,7 @@ export function TransactionCard({
 
           <button
             onClick={() => onDelete(transaction.id)}
-            className="p-1.5 rounded-lg border border-border hover:bg-rose-500/10 hover:border-rose-500/30 text-muted-foreground hover:text-rose-400 transition-colors cursor-pointer"
+            className="p-1.5 rounded-xl border border-slate-200 hover:bg-rose-50 hover:border-rose-200 text-slate-500 hover:text-rose-600 transition-colors cursor-pointer"
             title={t.delete}
           >
             <Trash2 className="w-3.5 h-3.5" />

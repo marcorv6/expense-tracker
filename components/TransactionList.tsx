@@ -72,22 +72,22 @@ export function TransactionList({
   };
 
   return (
-    <div className="p-6 rounded-2xl glass-card space-y-6">
+    <div className="p-6 rounded-3xl glass-card space-y-5">
       {/* Header & Control Bar */}
-      <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 pb-4 border-b border-border">
+      <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 pb-4 border-b border-slate-200">
         <div>
-          <h3 className="text-lg font-extrabold text-foreground flex items-center gap-2">
-            <Receipt className="w-5 h-5 text-indigo-400" />
+          <h3 className="text-lg font-extrabold text-slate-900 flex items-center gap-2">
+            <Receipt className="w-5 h-5 text-slate-700" />
             {t.ledgerTitle}
           </h3>
-          <p className="text-xs text-muted-foreground">
+          <p className="text-xs text-slate-500">
             {t.ledgerDesc}
           </p>
         </div>
 
         <button
           onClick={() => onOpenTransactionModal('expense')}
-          className="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-500 hover:to-indigo-500 text-white text-xs font-semibold font-mono transition-all shadow-lg shadow-indigo-600/25 cursor-pointer self-start md:self-auto"
+          className="inline-flex items-center gap-1.5 px-4 py-2 rounded-2xl bg-slate-900 hover:bg-slate-800 text-white text-xs font-bold font-mono transition-all shadow-md shadow-slate-900/10 cursor-pointer self-start md:self-auto"
         >
           <Plus className="w-4 h-4" />
           <span>{t.newEntry}</span>
@@ -98,23 +98,23 @@ export function TransactionList({
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
         {/* Search Bar */}
         <div className="relative">
-          <Search className="w-4 h-4 text-muted-foreground absolute left-3 top-1/2 -translate-y-1/2" />
+          <Search className="w-4 h-4 text-slate-400 absolute left-3.5 top-1/2 -translate-y-1/2" />
           <input
             type="text"
             placeholder={t.searchPlaceholder}
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
-            className="w-full pl-9 pr-3 py-2 text-xs rounded-xl border border-border bg-slate-950 text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-indigo-500 font-mono"
+            className="w-full pl-9 pr-3 py-2 text-xs rounded-2xl border border-slate-200 bg-slate-50 text-slate-900 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-slate-900 font-mono shadow-sm"
           />
         </div>
 
         {/* Type Filter */}
         <div className="flex items-center gap-2">
-          <Filter className="w-4 h-4 text-muted-foreground" />
+          <Filter className="w-4 h-4 text-slate-400" />
           <select
             value={typeFilter}
             onChange={(e) => setTypeFilter(e.target.value)}
-            className="w-full px-3 py-2 text-xs rounded-xl border border-border bg-slate-950 text-foreground focus:outline-none focus:ring-2 focus:ring-indigo-500 font-mono"
+            className="w-full px-3 py-2 text-xs rounded-2xl border border-slate-200 bg-slate-50 text-slate-900 focus:outline-none focus:ring-2 focus:ring-slate-900 font-mono shadow-sm"
           >
             <option value="all">{t.allTypes}</option>
             <option value="expense">{t.expensesOnly}</option>
@@ -127,7 +127,7 @@ export function TransactionList({
           <select
             value={selectedCategory}
             onChange={(e) => setSelectedCategory(e.target.value)}
-            className="w-full px-3 py-2 text-xs rounded-xl border border-border bg-slate-950 text-foreground focus:outline-none focus:ring-2 focus:ring-indigo-500 font-mono"
+            className="w-full px-3 py-2 text-xs rounded-2xl border border-slate-200 bg-slate-50 text-slate-900 focus:outline-none focus:ring-2 focus:ring-slate-900 font-mono shadow-sm"
           >
             <option value="">{t.allCategories}</option>
             {categories.map((cat) => (
@@ -140,7 +140,7 @@ export function TransactionList({
 
         {/* Sorting Options */}
         <div className="flex items-center gap-2">
-          <ArrowUpDown className="w-4 h-4 text-muted-foreground" />
+          <ArrowUpDown className="w-4 h-4 text-slate-400" />
           <select
             value={`${sortBy}-${sortOrder}`}
             onChange={(e) => {
@@ -151,7 +151,7 @@ export function TransactionList({
               setSortBy(by);
               setSortOrder(order);
             }}
-            className="w-full px-3 py-2 text-xs rounded-xl border border-border bg-slate-950 text-foreground focus:outline-none focus:ring-2 focus:ring-indigo-500 font-mono"
+            className="w-full px-3 py-2 text-xs rounded-2xl border border-slate-200 bg-slate-50 text-slate-900 focus:outline-none focus:ring-2 focus:ring-slate-900 font-mono shadow-sm"
           >
             <option value="date-desc">{t.newestFirst}</option>
             <option value="date-asc">{t.oldestFirst}</option>
@@ -164,15 +164,15 @@ export function TransactionList({
 
       {/* Batch Operations Floating Toolbar */}
       {selectedIds.length > 0 && (
-        <div className="p-3 rounded-xl bg-indigo-500/10 border border-indigo-500/30 flex flex-wrap items-center justify-between gap-3 animate-in fade-in shadow-lg">
-          <span className="text-xs font-mono text-indigo-400 font-bold">
+        <div className="p-3.5 rounded-2xl bg-slate-100 border border-slate-300 flex flex-wrap items-center justify-between gap-3 animate-in fade-in shadow-sm">
+          <span className="text-xs font-mono text-slate-900 font-bold">
             {selectedIds.length} entry(s) selected
           </span>
 
           <div className="flex items-center gap-2">
             <button
               onClick={() => onBatchAction(selectedIds, 'mark_cleared')}
-              className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-emerald-500/10 border border-emerald-500/30 text-emerald-400 text-xs font-mono font-bold hover:bg-emerald-500/20 transition-all cursor-pointer"
+              className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-emerald-50 border border-emerald-200 text-emerald-700 text-xs font-mono font-bold hover:bg-emerald-100 transition-all cursor-pointer shadow-sm"
             >
               <CheckCircle2 className="w-3.5 h-3.5" />
               {t.markCleared}
@@ -180,7 +180,7 @@ export function TransactionList({
 
             <button
               onClick={() => onBatchAction(selectedIds, 'mark_pending')}
-              className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-amber-500/10 border border-amber-500/30 text-amber-400 text-xs font-mono font-bold hover:bg-amber-500/20 transition-all cursor-pointer"
+              className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-amber-50 border border-amber-200 text-amber-700 text-xs font-mono font-bold hover:bg-amber-100 transition-all cursor-pointer shadow-sm"
             >
               <Clock className="w-3.5 h-3.5" />
               {t.markPending}
@@ -188,7 +188,7 @@ export function TransactionList({
 
             <button
               onClick={() => onBatchAction(selectedIds, 'delete')}
-              className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-rose-500/10 border border-rose-500/30 text-rose-400 text-xs font-mono font-bold hover:bg-rose-500/20 transition-all cursor-pointer"
+              className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-rose-50 border border-rose-200 text-rose-700 text-xs font-mono font-bold hover:bg-rose-100 transition-all cursor-pointer shadow-sm"
             >
               <Trash2 className="w-3.5 h-3.5" />
               {t.deleteSelected}
@@ -200,11 +200,11 @@ export function TransactionList({
       {/* Register List */}
       {transactions.length === 0 ? (
         <div className="py-12 text-center space-y-3">
-          <Receipt className="w-10 h-10 text-muted-foreground mx-auto opacity-40" />
-          <h4 className="text-sm font-semibold text-foreground">{t.noTransactionsFound}</h4>
+          <Receipt className="w-10 h-10 text-slate-400 mx-auto opacity-50" />
+          <h4 className="text-sm font-semibold text-slate-800">{t.noTransactionsFound}</h4>
           <button
             onClick={() => onOpenTransactionModal('expense')}
-            className="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-indigo-600 text-white text-xs font-semibold shadow-md shadow-indigo-600/20"
+            className="inline-flex items-center gap-2 px-4 py-2 rounded-2xl bg-slate-900 text-white text-xs font-bold shadow-md shadow-slate-900/10 cursor-pointer"
           >
             <Plus className="w-4 h-4" />
             <span>{t.createTransaction}</span>
@@ -212,13 +212,13 @@ export function TransactionList({
         </div>
       ) : (
         <div className="space-y-3">
-          <div className="flex items-center justify-between px-2 text-[11px] font-mono text-muted-foreground uppercase font-semibold">
+          <div className="flex items-center justify-between px-2 text-[11px] font-mono text-slate-500 uppercase font-bold">
             <div className="flex items-center gap-2">
               <input
                 type="checkbox"
                 checked={selectedIds.length === transactions.length && transactions.length > 0}
                 onChange={toggleSelectAll}
-                className="w-4 h-4 rounded border-border bg-slate-950 text-indigo-600 focus:ring-indigo-500 cursor-pointer"
+                className="w-4 h-4 rounded border-slate-300 text-slate-900 focus:ring-slate-900 cursor-pointer"
               />
               <span>{t.selectAll}</span>
             </div>

@@ -27,45 +27,45 @@
 }
 
 :root {
-  --background: #06070a;
-  --foreground: #f8fafc;
-  --card: #0d0f17;
-  --card-foreground: #f8fafc;
-  --popover: #0d0f17;
-  --popover-foreground: #f8fafc;
-  --primary: #f8fafc;
-  --primary-foreground: #06070a;
-  --secondary: #131722;
-  --secondary-foreground: #f8fafc;
-  --muted: #131722;
-  --muted-foreground: #94a3b8;
-  --accent: #1e2333;
-  --accent-foreground: #f8fafc;
-  --destructive: #f87171;
-  --border: rgba(255, 255, 255, 0.08);
-  --input: rgba(255, 255, 255, 0.08);
-  --ring: #f8fafc;
+  --background: #f0f2f6;
+  --foreground: #1e293b;
+  --card: #ffffff;
+  --card-foreground: #0f172a;
+  --popover: #ffffff;
+  --popover-foreground: #0f172a;
+  --primary: #0f172a;
+  --primary-foreground: #ffffff;
+  --secondary: #f8fafc;
+  --secondary-foreground: #0f172a;
+  --muted: #f1f5f9;
+  --muted-foreground: #64748b;
+  --accent: #f8fafc;
+  --accent-foreground: #0f172a;
+  --destructive: #ef4444;
+  --border: #e2e8f0;
+  --input: #e2e8f0;
+  --ring: #0f172a;
 }
 
 .dark {
-  --background: #06070a;
-  --foreground: #f8fafc;
-  --card: #0d0f17;
-  --card-foreground: #f8fafc;
-  --popover: #0d0f17;
-  --popover-foreground: #f8fafc;
-  --primary: #f8fafc;
-  --primary-foreground: #06070a;
-  --secondary: #131722;
-  --secondary-foreground: #f8fafc;
-  --muted: #131722;
-  --muted-foreground: #94a3b8;
-  --accent: #1e2333;
-  --accent-foreground: #f8fafc;
-  --destructive: #f87171;
-  --border: rgba(255, 255, 255, 0.08);
-  --input: rgba(255, 255, 255, 0.08);
-  --ring: #f8fafc;
+  --background: #f0f2f6;
+  --foreground: #1e293b;
+  --card: #ffffff;
+  --card-foreground: #0f172a;
+  --popover: #ffffff;
+  --popover-foreground: #0f172a;
+  --primary: #0f172a;
+  --primary-foreground: #ffffff;
+  --secondary: #f8fafc;
+  --secondary-foreground: #0f172a;
+  --muted: #f1f5f9;
+  --muted-foreground: #64748b;
+  --accent: #f8fafc;
+  --accent-foreground: #0f172a;
+  --destructive: #ef4444;
+  --border: #e2e8f0;
+  --input: #e2e8f0;
+  --ring: #0f172a;
 }
 
 @layer base {
@@ -83,34 +83,27 @@
   }
 }
 
-/* Premium Fintech Glassmorphism Utility Classes */
+/* Soft Neumorphic Clean Fintech Utility Classes */
 .glass-card {
-  background: rgba(13, 15, 23, 0.6);
-  backdrop-filter: blur(16px);
-  -webkit-backdrop-filter: blur(16px);
-  border: 1px solid rgba(255, 255, 255, 0.08);
-  box-shadow: 0 20px 40px -15px rgba(0, 0, 0, 0.5);
+  background: #ffffff;
+  border: 1px solid rgba(226, 232, 240, 0.8);
+  box-shadow: 0 12px 32px -8px rgba(15, 23, 42, 0.05), 0 4px 12px -4px rgba(15, 23, 42, 0.02);
+  border-radius: 1.5rem;
 }
 
 .glass-card-hover {
   transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
 }
 .glass-card-hover:hover {
-  border-color: rgba(255, 255, 255, 0.18);
+  border-color: rgba(203, 213, 225, 0.9);
   transform: translateY(-2px);
-  box-shadow: 0 24px 48px -12px rgba(0, 0, 0, 0.7);
+  box-shadow: 0 20px 40px -10px rgba(15, 23, 42, 0.08);
 }
 
-.glow-indigo {
-  box-shadow: 0 0 25px -5px rgba(99, 102, 241, 0.25);
-}
-
-.glow-emerald {
-  box-shadow: 0 0 25px -5px rgba(16, 185, 129, 0.25);
-}
-
-.glow-rose {
-  box-shadow: 0 0 25px -5px rgba(244, 63, 94, 0.25);
+/* Luxury Virtual Credit Card Graphic */
+.credit-card-gradient {
+  background: linear-gradient(135deg, #18181b 0%, #09090b 60%, #1e1b4b 100%);
+  box-shadow: 0 20px 35px -10px rgba(0, 0, 0, 0.35);
 }
 
 .tabular-nums {
@@ -125,9 +118,9 @@
   background: transparent;
 }
 ::-webkit-scrollbar-thumb {
-  background: rgba(148, 163, 184, 0.2);
+  background: rgba(148, 163, 184, 0.3);
   border-radius: 9999px;
 }
 ::-webkit-scrollbar-thumb:hover {
-  background: rgba(148, 163, 184, 0.4);
+  background: rgba(148, 163, 184, 0.5);
 }

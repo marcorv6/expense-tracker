@@ -22,7 +22,7 @@ export function TransactionModal({
   initialData,
   defaultType = 'expense',
 }: TransactionModalProps) {
-  const { t } = usePreferences();
+  const { t, formatCurrency } = usePreferences();
 
   const [type, setType] = useState<'expense' | 'income'>(initialData ? initialData.type : defaultType);
   const [amount, setAmount] = useState<string>(initialData ? initialData.amount.toString() : '');
@@ -67,29 +67,29 @@ export function TransactionModal({
   };
 
   const filteredCategories = categories.filter((c) => c.type === type);
+  const numericAmount = parseFloat(amount) || 0;
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/75 backdrop-blur-md animate-in fade-in">
-      <div className="w-full max-w-lg rounded-2xl bg-slate-900/90 border border-white/10 shadow-2xl p-6 space-y-6 relative overflow-hidden">
-        {/* Glow accent */}
-        <div className="absolute -top-10 -right-10 w-32 h-32 bg-indigo-500/20 blur-3xl rounded-full pointer-events-none" />
-
-        <div className="flex items-center justify-between border-b border-white/10 pb-4 relative z-10">
-          <h3 className="text-lg font-extrabold text-white flex items-center gap-2">
-            <Receipt className="w-5 h-5 text-indigo-400" />
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-md animate-in fade-in">
+      <div className="w-full max-w-lg rounded-3xl bg-white border border-slate-200 shadow-2xl overflow-hidden flex flex-col justify-between">
+        {/* Header */}
+        <div className="p-6 pb-4 border-b border-slate-100 flex items-center justify-between">
+          <h3 className="text-lg font-extrabold text-slate-900 flex items-center gap-2">
+            <Receipt className="w-5 h-5 text-slate-700" />
             {initialData ? 'Audit Transaction Entry' : `Log New ${type === 'expense' ? t.addExpense : t.addIncome}`}
           </h3>
           <button
             onClick={onClose}
-            className="p-1.5 rounded-lg border border-white/10 text-slate-400 hover:text-white transition-colors cursor-pointer"
+            className="p-2 rounded-full border border-slate-200 text-slate-400 hover:text-slate-900 hover:bg-slate-50 transition-colors cursor-pointer"
           >
             <X className="w-4 h-4" />
           </button>
         </div>
 
-        <form onSubmit={handleSubmit} className="space-y-4 relative z-10">
+        {/* Form Body */}
+        <form onSubmit={handleSubmit} className="p-6 space-y-4">
           {/* Segmented Type Switcher */}
-          <div className="grid grid-cols-2 gap-1.5 p-1 rounded-xl bg-slate-950 border border-white/10">
+          <div className="grid grid-cols-2 gap-1.5 p-1 rounded-2xl bg-slate-100 border border-slate-200">
             <button
               type="button"
               onClick={() => {
@@ -97,10 +97,10 @@ export function TransactionModal({
                 const cat = categories.find((c) => c.type === 'expense');
                 if (cat) setCategoryId(cat.id);
               }}
-              className={`py-2 text-xs font-mono font-bold rounded-lg transition-all cursor-pointer ${
+              className={`py-2 text-xs font-mono font-bold rounded-xl transition-all cursor-pointer ${
                 type === 'expense'
-                  ? 'bg-rose-500/90 text-white shadow-md shadow-rose-500/20'
-                  : 'text-slate-400 hover:text-white'
+                  ? 'bg-rose-500 text-white shadow-sm'
+                  : 'text-slate-500 hover:text-slate-900'
               }`}
             >
               {t.expenseLabel}
@@ -112,10 +112,10 @@ export function TransactionModal({
                 const cat = categories.find((c) => c.type === 'income');
                 if (cat) setCategoryId(cat.id);
               }}
-              className={`py-2 text-xs font-mono font-bold rounded-lg transition-all cursor-pointer ${
+              className={`py-2 text-xs font-mono font-bold rounded-xl transition-all cursor-pointer ${
                 type === 'income'
-                  ? 'bg-emerald-500/90 text-white shadow-md shadow-emerald-500/20'
-                  : 'text-slate-400 hover:text-white'
+                  ? 'bg-emerald-500 text-white shadow-sm'
+                  : 'text-slate-500 hover:text-slate-900'
               }`}
             >
               {t.incomeLabel}
@@ -124,7 +124,7 @@ export function TransactionModal({
 
           {/* Amount Input */}
           <div className="space-y-1">
-            <label className="text-xs font-mono text-slate-400">{t.amountLabel}</label>
+            <label className="text-xs font-mono font-bold text-slate-600">{t.amountLabel}</label>
             <input
               type="number"
               step="0.01"
@@ -132,31 +132,31 @@ export function TransactionModal({
               placeholder="0.00"
               value={amount}
               onChange={(e) => setAmount(e.target.value)}
-              className="w-full px-3.5 py-2.5 text-sm rounded-xl border border-white/10 bg-slate-950 text-white font-mono tabular-nums focus:ring-2 focus:ring-indigo-500 focus:outline-none"
+              className="w-full px-4 py-2.5 text-base rounded-2xl border border-slate-200 bg-slate-50 text-slate-900 font-mono font-bold tabular-nums focus:ring-2 focus:ring-slate-900 focus:outline-none shadow-sm"
             />
           </div>
 
           {/* Description */}
           <div className="space-y-1">
-            <label className="text-xs font-mono text-slate-400">{t.descriptionLabel}</label>
+            <label className="text-xs font-mono font-bold text-slate-600">{t.descriptionLabel}</label>
             <input
               type="text"
               required
               placeholder="e.g. Whole Foods Market, Office Rent..."
               value={description}
               onChange={(e) => setDescription(e.target.value)}
-              className="w-full px-3.5 py-2 text-xs rounded-xl border border-white/10 bg-slate-950 text-white focus:ring-2 focus:ring-indigo-500 focus:outline-none"
+              className="w-full px-4 py-2 text-xs rounded-2xl border border-slate-200 bg-slate-50 text-slate-900 focus:ring-2 focus:ring-slate-900 focus:outline-none shadow-sm"
             />
           </div>
 
           {/* Category & Date */}
           <div className="grid grid-cols-2 gap-3">
             <div className="space-y-1">
-              <label className="text-xs font-mono text-slate-400">{t.categoryLabel}</label>
+              <label className="text-xs font-mono font-bold text-slate-600">{t.categoryLabel}</label>
               <select
                 value={categoryId}
                 onChange={(e) => setCategoryId(e.target.value)}
-                className="w-full px-3 py-2 text-xs rounded-xl border border-white/10 bg-slate-950 text-white focus:ring-2 focus:ring-indigo-500 focus:outline-none font-mono"
+                className="w-full px-3.5 py-2 text-xs rounded-2xl border border-slate-200 bg-slate-50 text-slate-900 focus:ring-2 focus:ring-slate-900 focus:outline-none font-mono shadow-sm"
               >
                 {filteredCategories.map((cat) => (
                   <option key={cat.id} value={cat.id}>
@@ -167,13 +167,13 @@ export function TransactionModal({
             </div>
 
             <div className="space-y-1">
-              <label className="text-xs font-mono text-slate-400">{t.dateLabel}</label>
+              <label className="text-xs font-mono font-bold text-slate-600">{t.dateLabel}</label>
               <input
                 type="date"
                 required
                 value={date}
                 onChange={(e) => setDate(e.target.value)}
-                className="w-full px-3 py-2 text-xs rounded-xl border border-white/10 bg-slate-950 text-white focus:ring-2 focus:ring-indigo-500 focus:outline-none font-mono"
+                className="w-full px-3.5 py-2 text-xs rounded-2xl border border-slate-200 bg-slate-50 text-slate-900 focus:ring-2 focus:ring-slate-900 focus:outline-none font-mono shadow-sm"
               />
             </div>
           </div>
@@ -181,11 +181,11 @@ export function TransactionModal({
           {/* Payment Method & Status */}
           <div className="grid grid-cols-2 gap-3">
             <div className="space-y-1">
-              <label className="text-xs font-mono text-slate-400">{t.paymentChannel}</label>
+              <label className="text-xs font-mono font-bold text-slate-600">{t.paymentChannel}</label>
               <select
                 value={paymentMethod}
                 onChange={(e) => setPaymentMethod(e.target.value as PaymentMethod)}
-                className="w-full px-3 py-2 text-xs rounded-xl border border-white/10 bg-slate-950 text-white focus:ring-2 focus:ring-indigo-500 focus:outline-none font-mono"
+                className="w-full px-3.5 py-2 text-xs rounded-2xl border border-slate-200 bg-slate-50 text-slate-900 focus:ring-2 focus:ring-slate-900 focus:outline-none font-mono shadow-sm"
               >
                 <option value="credit_card">Credit Card</option>
                 <option value="debit_card">Debit Card</option>
@@ -196,11 +196,11 @@ export function TransactionModal({
             </div>
 
             <div className="space-y-1">
-              <label className="text-xs font-mono text-slate-400">{t.auditStatus}</label>
+              <label className="text-xs font-mono font-bold text-slate-600">{t.auditStatus}</label>
               <select
                 value={status}
                 onChange={(e) => setStatus(e.target.value as TransactionStatus)}
-                className="w-full px-3 py-2 text-xs rounded-xl border border-white/10 bg-slate-950 text-white focus:ring-2 focus:ring-indigo-500 focus:outline-none font-mono"
+                className="w-full px-3.5 py-2 text-xs rounded-2xl border border-slate-200 bg-slate-50 text-slate-900 focus:ring-2 focus:ring-slate-900 focus:outline-none font-mono shadow-sm"
               >
                 <option value="cleared">{t.cleared}</option>
                 <option value="pending">{t.pending}</option>
@@ -210,33 +210,42 @@ export function TransactionModal({
 
           {/* Notes */}
           <div className="space-y-1">
-            <label className="text-xs font-mono text-slate-400">{t.notesLabel}</label>
+            <label className="text-xs font-mono font-bold text-slate-600">{t.notesLabel}</label>
             <textarea
               rows={2}
               placeholder="Additional tags or transaction notes..."
               value={notes}
               onChange={(e) => setNotes(e.target.value)}
-              className="w-full px-3 py-2 text-xs rounded-xl border border-white/10 bg-slate-950 text-white focus:ring-2 focus:ring-indigo-500 focus:outline-none resize-none"
+              className="w-full px-3.5 py-2 text-xs rounded-2xl border border-slate-200 bg-slate-50 text-slate-900 focus:ring-2 focus:ring-slate-900 focus:outline-none resize-none shadow-sm"
             />
           </div>
 
-          {/* Dialog Actions */}
-          <div className="flex items-center justify-end gap-3 pt-4 border-t border-white/10">
-            <button
-              type="button"
-              onClick={onClose}
-              className="px-4 py-2 rounded-xl border border-white/10 text-xs font-mono text-slate-400 hover:text-white cursor-pointer"
-            >
-              {t.cancel}
-            </button>
-            <button
-              type="submit"
-              disabled={isSubmitting}
-              className="inline-flex items-center gap-2 px-5 py-2 rounded-xl bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-500 hover:to-indigo-500 text-white text-xs font-mono font-bold shadow-lg shadow-indigo-600/25 cursor-pointer disabled:opacity-50"
-            >
-              <Save className="w-4 h-4" />
-              <span>{isSubmitting ? t.processing : t.saveRecord}</span>
-            </button>
+          {/* Dark Matte Summary Banner Footer matching reference screenshot */}
+          <div className="p-4 rounded-2xl bg-slate-900 text-white flex items-center justify-between mt-4 shadow-lg">
+            <div>
+              <span className="text-[11px] font-mono text-slate-400 block font-semibold">Total Entry</span>
+              <span className="text-base font-extrabold font-mono tabular-nums text-white">
+                {formatCurrency(numericAmount)}
+              </span>
+            </div>
+
+            <div className="flex items-center gap-2">
+              <button
+                type="button"
+                onClick={onClose}
+                className="px-3 py-2 rounded-xl text-xs font-mono text-slate-300 hover:text-white cursor-pointer"
+              >
+                {t.cancel}
+              </button>
+              <button
+                type="submit"
+                disabled={isSubmitting}
+                className="inline-flex items-center gap-2 px-5 py-2 rounded-xl bg-white hover:bg-slate-100 text-slate-900 font-bold text-xs shadow-sm cursor-pointer disabled:opacity-50"
+              >
+                <Save className="w-4 h-4 text-slate-900" />
+                <span>{isSubmitting ? t.processing : t.saveRecord}</span>
+              </button>
+            </div>
           </div>
         </form>
       </div>

@@ -44,28 +44,28 @@ export function Sidebar({
   ];
 
   return (
-    <aside className="w-full lg:w-64 space-y-6 flex-shrink-0">
+    <aside className="w-full lg:w-64 space-y-5 flex-shrink-0">
       {/* Mobile Quick Action Bar */}
       <div className="flex gap-2 sm:hidden">
         <button
           onClick={() => onOpenTransactionModal('expense')}
-          className="flex-1 py-3 px-4 rounded-xl bg-gradient-to-r from-blue-600 to-indigo-600 text-white font-semibold text-xs flex items-center justify-center gap-2 shadow-lg shadow-indigo-600/25"
+          className="flex-1 py-3 px-4 rounded-2xl bg-slate-900 text-white font-bold text-xs flex items-center justify-center gap-2 shadow-lg shadow-slate-900/10"
         >
           <Plus className="w-4 h-4" />
           <span>{t.addExpense}</span>
         </button>
         <button
           onClick={() => onOpenTransactionModal('income')}
-          className="flex-1 py-3 px-4 rounded-xl bg-emerald-500/10 border border-emerald-500/30 text-emerald-400 font-semibold text-xs flex items-center justify-center gap-2"
+          className="flex-1 py-3 px-4 rounded-2xl bg-emerald-50 border border-emerald-200 text-emerald-700 font-bold text-xs flex items-center justify-center gap-2"
         >
-          <ArrowUpRight className="w-4 h-4" />
+          <ArrowUpRight className="w-4 h-4 text-emerald-600" />
           <span>{t.addIncome}</span>
         </button>
       </div>
 
       {/* Main Glass Navigation Panel */}
-      <div className="p-3 rounded-2xl glass-card space-y-1">
-        <span className="px-3 py-2 text-[10px] font-mono text-muted-foreground uppercase tracking-widest block font-semibold">
+      <div className="p-3 rounded-3xl glass-card space-y-1">
+        <span className="px-3 py-2 text-[10px] font-mono text-slate-400 uppercase tracking-widest block font-bold">
           {t.financialHub}
         </span>
         {mainNav.map((item) => {
@@ -75,10 +75,10 @@ export function Sidebar({
             <button
               key={item.id}
               onClick={() => setActiveTab(item.id)}
-              className={`w-full flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-xs font-semibold transition-all cursor-pointer ${
+              className={`w-full flex items-center gap-3 px-3.5 py-2.5 rounded-2xl text-xs font-bold transition-all cursor-pointer ${
                 isActive
-                  ? 'bg-gradient-to-r from-blue-600 to-indigo-600 text-white shadow-md shadow-indigo-600/20 font-bold'
-                  : 'text-muted-foreground hover:text-foreground hover:bg-accent/60'
+                  ? 'bg-slate-900 text-white shadow-md shadow-slate-900/10'
+                  : 'text-slate-500 hover:text-slate-900 hover:bg-slate-50'
               }`}
             >
               <Icon className={`w-4 h-4 ${isActive ? 'text-white' : 'text-slate-400'}`} />
@@ -89,14 +89,14 @@ export function Sidebar({
       </div>
 
       {/* Categories & Budgets Filter Panel */}
-      <div className="p-3.5 rounded-2xl glass-card space-y-3">
+      <div className="p-4 rounded-3xl glass-card space-y-3">
         <div className="flex items-center justify-between px-1">
-          <span className="text-[10px] font-mono text-muted-foreground uppercase tracking-widest block font-semibold">
+          <span className="text-[10px] font-mono text-slate-400 uppercase tracking-widest block font-bold">
             {t.categoriesAndCaps}
           </span>
           <button
             onClick={onOpenCategoryModal}
-            className="text-[11px] font-mono text-indigo-400 hover:text-indigo-300 font-bold flex items-center gap-1 cursor-pointer"
+            className="text-[11px] font-mono text-slate-900 hover:text-slate-700 font-extrabold flex items-center gap-1 cursor-pointer"
           >
             <Plus className="w-3 h-3" />
             {t.manage}
@@ -106,14 +106,14 @@ export function Sidebar({
         <div className="space-y-1 max-h-56 overflow-y-auto pr-1">
           <button
             onClick={() => setSelectedCategory('')}
-            className={`w-full flex items-center justify-between px-3 py-2 rounded-xl text-xs transition-all cursor-pointer ${
+            className={`w-full flex items-center justify-between px-3 py-2 rounded-2xl text-xs transition-all cursor-pointer ${
               selectedCategory === ''
-                ? 'bg-accent/80 font-bold text-foreground border border-white/10'
-                : 'text-muted-foreground hover:text-foreground hover:bg-accent/40'
+                ? 'bg-slate-100 font-extrabold text-slate-900 border border-slate-200'
+                : 'text-slate-500 hover:text-slate-900 hover:bg-slate-50'
             }`}
           >
             <span className="flex items-center gap-2">
-              <FolderKanban className="w-3.5 h-3.5 text-indigo-400" />
+              <FolderKanban className="w-3.5 h-3.5 text-slate-700" />
               {t.allCategories}
             </span>
           </button>
@@ -122,10 +122,10 @@ export function Sidebar({
             <button
               key={cat.id}
               onClick={() => setSelectedCategory(cat.id)}
-              className={`w-full flex items-center justify-between px-3 py-2 rounded-xl text-xs transition-all cursor-pointer ${
+              className={`w-full flex items-center justify-between px-3 py-2 rounded-2xl text-xs transition-all cursor-pointer ${
                 selectedCategory === cat.id
-                  ? 'bg-accent/80 font-bold text-foreground border border-white/10'
-                  : 'text-muted-foreground hover:text-foreground hover:bg-accent/40'
+                  ? 'bg-slate-100 font-extrabold text-slate-900 border border-slate-200'
+                  : 'text-slate-500 hover:text-slate-900 hover:bg-slate-50'
               }`}
             >
               <span className="flex items-center gap-2 truncate">
@@ -136,7 +136,7 @@ export function Sidebar({
                 <span className="truncate">{cat.name}</span>
               </span>
               {cat.monthlyBudget > 0 && (
-                <span className="text-[10px] font-mono text-muted-foreground font-medium">
+                <span className="text-[10px] font-mono text-slate-500 font-semibold">
                   {formatCurrency(cat.monthlyBudget)}
                 </span>
               )}
@@ -146,24 +146,24 @@ export function Sidebar({
       </div>
 
       {/* Export & Data Tools */}
-      <div className="p-3.5 rounded-2xl glass-card space-y-2.5">
-        <span className="text-[10px] font-mono text-muted-foreground uppercase tracking-widest block font-semibold px-1">
+      <div className="p-4 rounded-3xl glass-card space-y-2.5">
+        <span className="text-[10px] font-mono text-slate-400 uppercase tracking-widest block font-bold px-1">
           {t.dataExport}
         </span>
         <div className="grid grid-cols-2 gap-2">
           <button
             onClick={() => onExport('csv')}
-            className="flex items-center justify-center gap-1.5 py-2 px-3 rounded-xl border border-border hover:bg-accent/70 text-xs font-mono text-muted-foreground hover:text-foreground transition-all cursor-pointer"
+            className="flex items-center justify-center gap-1.5 py-2 px-3 rounded-2xl border border-slate-200 hover:bg-slate-100 text-xs font-mono font-bold text-slate-700 transition-all cursor-pointer shadow-sm"
           >
-            <Download className="w-3.5 h-3.5 text-indigo-400" />
+            <Download className="w-3.5 h-3.5 text-slate-500" />
             <span>.CSV</span>
           </button>
 
           <button
             onClick={() => onExport('json')}
-            className="flex items-center justify-center gap-1.5 py-2 px-3 rounded-xl border border-border hover:bg-accent/70 text-xs font-mono text-muted-foreground hover:text-foreground transition-all cursor-pointer"
+            className="flex items-center justify-center gap-1.5 py-2 px-3 rounded-2xl border border-slate-200 hover:bg-slate-100 text-xs font-mono font-bold text-slate-700 transition-all cursor-pointer shadow-sm"
           >
-            <Download className="w-3.5 h-3.5 text-indigo-400" />
+            <Download className="w-3.5 h-3.5 text-slate-500" />
             <span>.JSON</span>
           </button>
         </div>
