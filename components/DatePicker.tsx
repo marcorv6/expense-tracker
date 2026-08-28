@@ -111,7 +111,7 @@ export function DatePicker({ value, onChange, label }: DatePickerProps) {
 
       {/* Custom Popover Dropdown */}
       {isOpen && (
-        <div className="absolute top-full left-0 mt-2 z-50 w-72 p-4 rounded-2xl bg-white border border-slate-200 shadow-2xl space-y-3 animate-in fade-in">
+        <div className="absolute top-full right-0 mt-2 z-50 w-72 p-4 rounded-2xl bg-white border border-slate-200 shadow-2xl space-y-3 animate-in fade-in">
           {/* Quick Presets */}
           <div className="flex items-center gap-1.5 overflow-x-auto pb-1 no-scrollbar">
             <button

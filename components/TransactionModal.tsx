@@ -106,7 +106,7 @@ export function TransactionModal({
         <div className="p-6 pb-4 border-b border-slate-100 flex items-center justify-between">
           <h3 className="text-lg font-extrabold text-slate-900 flex items-center gap-2">
             <Receipt className="w-5 h-5 text-slate-700" />
-            {initialData ? 'Audit Transaction Entry' : `Log New ${type === 'expense' ? t.addExpense : t.addIncome}`}
+            {initialData ? 'Audit Transaction Entry' : (type === 'expense' ? t.addExpense : t.addIncome)}
           </h3>
           <button
             onClick={handleCloseModal}
