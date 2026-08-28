@@ -1,0 +1,222 @@
+openapi: 3.0.3
+info:
+  title: SpendFlow Expense Tracker API Specification
+  description: >
+    Production-grade RESTful API specification for SpendFlow, a personal finance and expense tracking platform.
+    Supports transaction management, category budgets, financial analytics, export capabilities, and JWT authentication.
+  version: 1.0.0
+  contact:
+    name: Marco Romero
+    url: https://marco-romero.com
+servers:
+  - url: /api/v1
+    description: Next.js API Router Endpoint (v1)
+
+paths:
+  /auth/register:
+    post:
+      summary: Register a new user account
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [email, password, name]
+              properties:
+                email:
+                  type: string
+                  format: email
+                password:
+                  type: string
+                  minLength: 6
+                name:
+                  type: string
+                currency:
+                  type: string
+                  default: USD
+      responses:
+        '201':
+          description: User registered successfully
+        '400':
+          description: Validation error or user exists
+
+  /auth/login:
+    post:
+      summary: Authenticate user or start Recruiter Demo Guest session
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                email:
+                  type: string
+                password:
+                  type: string
+                isDemo:
+                  type: boolean
+      responses:
+        '200':
+          description: Successfully authenticated with JWT token
+
+  /transactions:
+    get:
+      summary: Retrieve paginated & filtered transactions
+      security:
+        - BearerAuth: []
+      parameters:
+        - name: type
+          in: query
+          schema:
+            type: string
+            enum: [all, expense, income]
+        - name: categoryId
+          in: query
+          schema:
+            type: string
+        - name: startDate
+          in: query
+          schema:
+            type: string
+        - name: endDate
+          in: query
+          schema:
+            type: string
+        - name: search
+          in: query
+          schema:
+            type: string
+      responses:
+        '200':
+          description: List of matching transactions with summary total
+
+    post:
+      summary: Log a new transaction
+      security:
+        - BearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [type, amount, description, categoryId]
+              properties:
+                type:
+                  type: string
+                  enum: [expense, income]
+                amount:
+                  type: number
+                currency:
+                  type: string
+                description:
+                  type: string
+                categoryId:
+                  type: string
+                date:
+                  type: string
+                paymentMethod:
+                  type: string
+                status:
+                  type: string
+                  enum: [cleared, pending]
+      responses:
+        '201':
+          description: Transaction created
+
+  /transactions/{id}:
+    get:
+      summary: Get detailed transaction by ID
+      security:
+        - BearerAuth: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Transaction payload
+
+    put:
+      summary: Replace existing transaction
+      security:
+        - BearerAuth: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Updated transaction
+
+    delete:
+      summary: Delete transaction record
+      security:
+        - BearerAuth: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Deletion confirmed
+
+  /categories:
+    get:
+      summary: Fetch user categories with monthly budget targets
+      security:
+        - BearerAuth: []
+      responses:
+        '200':
+          description: Array of categories
+
+    post:
+      summary: Create custom category with budget
+      security:
+        - BearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [name, type]
+              properties:
+                name:
+                  type: string
+                type:
+                  type: string
+                  enum: [expense, income]
+                color:
+                  type: string
+                icon:
+                  type: string
+                monthlyBudget:
+                  type: number
+      responses:
+        '201':
+          description: Category created
+
+  /stats:
+    get:
+      summary: Financial metrics analytics & monthly totals
+      security:
+        - BearerAuth: []
+      responses:
+        '200':
+          description: Comprehensive financial statistics, balance, savings rate, and category breakdowns
+
+components:
+  securitySchemes:
+    BearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
