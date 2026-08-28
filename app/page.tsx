@@ -289,6 +289,7 @@ export default function DashboardPage() {
                 <SpendingCharts
                   categoryBreakdown={stats?.categoryBreakdown || []}
                   monthlyTrends={stats?.monthlyTrends || []}
+                  transactions={transactions}
                 />
                 <BudgetOverview
                   categories={categories}

@@ -1,19 +1,21 @@
 'use client';
 
 import React, { useState } from 'react';
-import { CategoryBreakdown } from '@/types/expense';
-import { Share2, Smartphone, CreditCard, ShoppingBag, Zap, Layers } from 'lucide-react';
+import { CategoryBreakdown, TransactionItem } from '@/types/expense';
+import { Share2, Smartphone, CreditCard, ShoppingBag, Zap, ArrowDownLeft } from 'lucide-react';
 import { usePreferences } from '@/context/PreferencesContext';
 import { toast } from 'sonner';
 
 interface SpendingChartsProps {
   categoryBreakdown: CategoryBreakdown[];
   monthlyTrends: { month: string; income: number; expense: number }[];
+  transactions?: TransactionItem[];
 }
 
 export function SpendingCharts({
   categoryBreakdown,
   monthlyTrends,
+  transactions = [],
 }: SpendingChartsProps) {
   const { t, formatCurrency } = usePreferences();
   const [timeframe, setTimeframe] = useState<'week' | 'month' | 'year'>('month');
@@ -43,6 +45,12 @@ export function SpendingCharts({
 
   const activePoint = chartPoints[selectedIndex] || chartPoints[3] || chartPoints[0];
 
+  // Dynamic top expense transactions for Activity Highlights
+  const topExpenses = transactions
+    .filter((tx) => tx.type === 'expense')
+    .sort((a, b) => b.amount - a.amount)
+    .slice(0, 2);
+
   const handleShareReport = () => {
     if (typeof window !== 'undefined') {
       navigator.clipboard.writeText(window.location.href);
@@ -66,9 +74,11 @@ export function SpendingCharts({
             </div>
             <div>
               <h3 className="text-base font-extrabold text-slate-900 tracking-tight leading-tight">
-                Cashflow Dynamics
+                {t.cashflowDynamics}
               </h3>
-              <span className="text-[11px] font-mono text-slate-400 font-semibold">Live Expenditure Velocity</span>
+              <span className="text-[11px] font-mono text-slate-400 font-semibold">
+                {t.cashflowDesc}
+              </span>
             </div>
           </div>
 
@@ -88,25 +98,36 @@ export function SpendingCharts({
               {formatCurrency(activePoint.amount)}
             </div>
             <span className="text-xs font-mono text-slate-400 block font-medium">
-              Audit Period: {activePoint.month} 16, 2026
+              {t.auditPeriod}: {activePoint.month} 16, 2026
             </span>
           </div>
 
           {/* Timeframe Pills */}
           <div className="inline-flex items-center p-1 rounded-2xl bg-slate-100 border border-slate-200 text-xs font-mono">
-            {(['week', 'month', 'year'] as const).map((tf) => (
-              <button
-                key={tf}
-                onClick={() => setTimeframe(tf)}
-                className={`px-3.5 py-1 rounded-xl font-bold capitalize transition-all cursor-pointer ${
-                  timeframe === tf
-                    ? 'bg-slate-900 text-white shadow-sm'
-                    : 'text-slate-500 hover:text-slate-900'
-                }`}
-              >
-                {tf}
-              </button>
-            ))}
+            <button
+              onClick={() => setTimeframe('week')}
+              className={`px-3 py-1 rounded-xl font-bold capitalize transition-all cursor-pointer ${
+                timeframe === 'week' ? 'bg-slate-900 text-white shadow-sm' : 'text-slate-500 hover:text-slate-900'
+              }`}
+            >
+              {t.week}
+            </button>
+            <button
+              onClick={() => setTimeframe('month')}
+              className={`px-3 py-1 rounded-xl font-bold capitalize transition-all cursor-pointer ${
+                timeframe === 'month' ? 'bg-slate-900 text-white shadow-sm' : 'text-slate-500 hover:text-slate-900'
+              }`}
+            >
+              {t.month}
+            </button>
+            <button
+              onClick={() => setTimeframe('year')}
+              className={`px-3 py-1 rounded-xl font-bold capitalize transition-all cursor-pointer ${
+                timeframe === 'year' ? 'bg-slate-900 text-white shadow-sm' : 'text-slate-500 hover:text-slate-900'
+              }`}
+            >
+              {t.year}
+            </button>
           </div>
         </div>
 
@@ -158,26 +179,26 @@ export function SpendingCharts({
               className="shadow-md transition-all duration-300"
             />
 
-            {/* Value Callout Badge */}
-            <g transform={`translate(${activePoint.x - 38}, ${activePoint.y - 34})`}>
+            {/* Dynamic i18n Value Callout Badge */}
+            <g transform={`translate(${activePoint.x - 45}, ${activePoint.y - 34})`}>
               <rect
                 x="0"
                 y="0"
-                width="76"
+                width="90"
                 height="24"
                 rx="12"
                 fill="#0f172a"
                 className="shadow-lg"
               />
               <text
-                x="38"
+                x="45"
                 y="16"
                 fill="#34d399"
                 fontSize="11"
                 style={{ fontFamily: 'Plus Jakarta Sans, -apple-system, sans-serif', fontWeight: 800 }}
                 textAnchor="middle"
               >
-                ${activePoint.amount}
+                {formatCurrency(activePoint.amount)}
               </text>
             </g>
 
@@ -211,38 +232,81 @@ export function SpendingCharts({
           </div>
         </div>
 
-        {/* Activity Highlights Sub-Section */}
+        {/* Dynamic Activity Highlights Sub-Section */}
         <div className="pt-2 border-t border-slate-100 space-y-3">
           <h4 className="text-xs font-extrabold font-mono text-slate-900 uppercase tracking-wider">
-            Activity Highlights
+            {t.activityHighlights}
           </h4>
 
           <div className="space-y-2.5">
-            <div className="flex items-center justify-between p-2.5 rounded-2xl bg-slate-50 border border-slate-100 hover:bg-slate-100/80 transition-all">
-              <div className="flex items-center gap-3">
-                <div className="w-9 h-9 rounded-2xl bg-slate-900 text-white flex items-center justify-center shadow-sm">
-                  <Smartphone className="w-4 h-4 text-emerald-400" />
+            {topExpenses.length > 0 ? (
+              topExpenses.map((tx) => (
+                <div
+                  key={tx.id}
+                  className="flex items-center justify-between p-2.5 rounded-2xl bg-slate-50 border border-slate-100 hover:bg-slate-100/80 transition-all"
+                >
+                  <div className="flex items-center gap-3">
+                    <div
+                      className="w-9 h-9 rounded-2xl text-white flex items-center justify-center shadow-sm"
+                      style={{ backgroundColor: tx.categoryColor || '#0f172a' }}
+                    >
+                      <ArrowDownLeft className="w-4 h-4 text-white" />
+                    </div>
+                    <div>
+                      <span className="text-xs font-bold text-slate-900 block leading-tight">
+                        {tx.description}
+                      </span>
+                      <span className="text-[10px] font-mono text-slate-400">
+                        {new Date(tx.date).toLocaleDateString('en-US', {
+                          month: 'short',
+                          day: 'numeric',
+                          year: 'numeric',
+                        })}
+                      </span>
+                    </div>
+                  </div>
+                  <span className="text-xs font-extrabold font-mono text-slate-900 tabular-nums">
+                    -{formatCurrency(tx.amount)}
+                  </span>
                 </div>
-                <div>
-                  <span className="text-xs font-bold text-slate-900 block leading-tight">Hardware Equipment</span>
-                  <span className="text-[10px] font-mono text-slate-400">23 Aug, 2026</span>
+              ))
+            ) : (
+              <>
+                <div className="flex items-center justify-between p-2.5 rounded-2xl bg-slate-50 border border-slate-100 hover:bg-slate-100/80 transition-all">
+                  <div className="flex items-center gap-3">
+                    <div className="w-9 h-9 rounded-2xl bg-slate-900 text-white flex items-center justify-center shadow-sm">
+                      <Smartphone className="w-4 h-4 text-emerald-400" />
+                    </div>
+                    <div>
+                      <span className="text-xs font-bold text-slate-900 block leading-tight">
+                        Hardware Equipment
+                      </span>
+                      <span className="text-[10px] font-mono text-slate-400">23 Aug, 2026</span>
+                    </div>
+                  </div>
+                  <span className="text-xs font-extrabold font-mono text-slate-900 tabular-nums">
+                    -{formatCurrency(745)}
+                  </span>
                 </div>
-              </div>
-              <span className="text-xs font-extrabold font-mono text-slate-900 tabular-nums">-$745.00</span>
-            </div>
 
-            <div className="flex items-center justify-between p-2.5 rounded-2xl bg-slate-50 border border-slate-100 hover:bg-slate-100/80 transition-all">
-              <div className="flex items-center gap-3">
-                <div className="w-9 h-9 rounded-2xl bg-indigo-600 text-white flex items-center justify-center shadow-sm">
-                  <Layers className="w-4 h-4 text-white" />
+                <div className="flex items-center justify-between p-2.5 rounded-2xl bg-slate-50 border border-slate-100 hover:bg-slate-100/80 transition-all">
+                  <div className="flex items-center gap-3">
+                    <div className="w-9 h-9 rounded-2xl bg-indigo-600 text-white flex items-center justify-center shadow-sm">
+                      <ArrowDownLeft className="w-4 h-4 text-white" />
+                    </div>
+                    <div>
+                      <span className="text-xs font-bold text-slate-900 block leading-tight">
+                        Cloud Infrastructure
+                      </span>
+                      <span className="text-[10px] font-mono text-slate-400">15 Aug, 2026</span>
+                    </div>
+                  </div>
+                  <span className="text-xs font-extrabold font-mono text-slate-900 tabular-nums">
+                    -{formatCurrency(35)}
+                  </span>
                 </div>
-                <div>
-                  <span className="text-xs font-bold text-slate-900 block leading-tight">Cloud Infrastructure</span>
-                  <span className="text-[10px] font-mono text-slate-400">15 Aug, 2026</span>
-                </div>
-              </div>
-              <span className="text-xs font-extrabold font-mono text-slate-900 tabular-nums">-$35.00</span>
-            </div>
+              </>
+            )}
           </div>
         </div>
       </div>
