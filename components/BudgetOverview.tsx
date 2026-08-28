@@ -18,7 +18,7 @@ export function BudgetOverview({ categories, onOpenCategoryModal }: BudgetOvervi
   );
 
   return (
-    <div className="p-6 rounded-3xl glass-card space-y-5">
+    <div id="tour-budget-caps" className="p-6 rounded-3xl glass-card space-y-5">
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div className="space-y-0.5">
           <h3 className="text-base font-bold text-slate-900 flex items-center gap-2">

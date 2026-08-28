@@ -72,7 +72,7 @@ export function TransactionList({
   };
 
   return (
-    <div className="p-6 rounded-3xl glass-card space-y-5">
+    <div id="tour-transaction-ledger" className="p-6 rounded-3xl glass-card space-y-5">
       {/* Header & Control Bar */}
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 pb-4 border-b border-slate-200">
         <div>

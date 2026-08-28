@@ -5,7 +5,6 @@ import { useAuth } from '@/context/AuthContext';
 import { usePreferences } from '@/context/PreferencesContext';
 import { SupportedCurrency, SupportedLanguage } from '@/lib/i18n/translations';
 import { AuthModal } from './AuthModal';
-import { OnboardingTutorial } from './OnboardingTutorial';
 import {
   Wallet,
   Sparkles,
@@ -21,13 +20,13 @@ import {
 interface HeaderProps {
   onOpenTransactionModal: (type?: 'expense' | 'income') => void;
   onOpenCategoryModal: () => void;
+  onStartTour?: () => void;
 }
 
-export function Header({ onOpenTransactionModal }: HeaderProps) {
+export function Header({ onOpenTransactionModal, onStartTour }: HeaderProps) {
   const { user, isAuthenticated, logout, loginAsDemoGuest } = useAuth();
   const { currency, setCurrency, language, setLanguage, t } = usePreferences();
   const [isAuthModalOpen, setIsAuthModalOpen] = useState(false);
-  const [isTutorialOpen, setIsTutorialOpen] = useState(false);
 
   return (
     <header className="sticky top-0 z-40 w-full border-b border-slate-200/80 bg-white/90 backdrop-blur-xl">
@@ -65,9 +64,10 @@ export function Header({ onOpenTransactionModal }: HeaderProps) {
         <div className="flex items-center gap-1.5 sm:gap-3 shrink-0">
           {/* Tutorial Button */}
           <button
-            onClick={() => setIsTutorialOpen(true)}
+            id="tour-help-button"
+            onClick={() => onStartTour?.()}
             className="p-2 sm:px-3 sm:py-1.5 rounded-xl border border-slate-200 bg-slate-50 hover:bg-slate-100 text-xs font-mono font-bold text-slate-700 transition-all shadow-sm cursor-pointer"
-            title="Take Tour & Help Tutorial"
+            title="Take Tour & Help Setup"
           >
             <HelpCircle className="w-4 h-4 sm:w-3.5 sm:h-3.5 text-emerald-600" />
           </button>
@@ -111,6 +111,7 @@ export function Header({ onOpenTransactionModal }: HeaderProps) {
 
           {/* Desktop Quick Action Buttons */}
           <button
+            id="tour-add-expense"
             onClick={() => onOpenTransactionModal('expense')}
             className="hidden md:inline-flex items-center gap-2 px-3.5 py-2 rounded-xl bg-slate-900 hover:bg-slate-800 text-white text-xs font-bold font-mono transition-all shadow-md shadow-slate-900/10 active:scale-95 cursor-pointer"
           >
@@ -119,6 +120,7 @@ export function Header({ onOpenTransactionModal }: HeaderProps) {
           </button>
 
           <button
+            id="tour-add-income"
             onClick={() => onOpenTransactionModal('income')}
             className="hidden lg:inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-emerald-50 border border-emerald-200/80 hover:bg-emerald-100 text-emerald-700 text-xs font-bold font-mono transition-all active:scale-95 cursor-pointer"
           >
@@ -184,7 +186,6 @@ export function Header({ onOpenTransactionModal }: HeaderProps) {
       </div>
 
       <AuthModal isOpen={isAuthModalOpen} onClose={() => setIsAuthModalOpen(false)} />
-      <OnboardingTutorial isOpen={isTutorialOpen} onClose={() => setIsTutorialOpen(false)} />
     </header>
   );
 }

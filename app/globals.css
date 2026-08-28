@@ -128,3 +128,69 @@
 ::-webkit-scrollbar-thumb:hover {
   background: rgba(148, 163, 184, 0.5);
 }
+
+/* Driver.js Custom SpendFlow Fintech Tour Styling */
+.driver-popover.spendflow-tour-popover {
+  background-color: #ffffff;
+  color: #0f172a;
+  border-radius: 1.25rem;
+  border: 1px solid #e2e8f0;
+  box-shadow: 0 25px 50px -12px rgba(15, 23, 42, 0.25);
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  padding: 1.25rem;
+  max-width: 320px;
+}
+
+.driver-popover.spendflow-tour-popover .driver-popover-title {
+  font-size: 0.95rem;
+  font-weight: 800;
+  color: #0f172a;
+  margin-bottom: 0.5rem;
+}
+
+.driver-popover.spendflow-tour-popover .driver-popover-description {
+  font-size: 0.75rem;
+  color: #64748b;
+  line-height: 1.5;
+  font-family: 'JetBrains Mono', monospace;
+}
+
+.driver-popover.spendflow-tour-popover .driver-popover-footer {
+  margin-top: 1rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.driver-popover.spendflow-tour-popover .driver-popover-btn {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.7rem;
+  font-weight: 700;
+  border-radius: 0.75rem;
+  padding: 0.4rem 0.8rem;
+  background-color: #0f172a;
+  color: #ffffff;
+  border: none;
+  transition: all 0.2s ease;
+  cursor: pointer;
+}
+
+.driver-popover.spendflow-tour-popover .driver-popover-prev-btn {
+  background-color: #f1f5f9;
+  color: #475569;
+}
+.driver-popover.spendflow-tour-popover .driver-popover-prev-btn:hover {
+  background-color: #e2e8f0;
+  color: #0f172a;
+}
+
+.driver-popover.spendflow-tour-popover .driver-popover-next-btn:hover {
+  background-color: #1e293b;
+}
+
+.driver-popover.spendflow-tour-popover .driver-popover-progress-text {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.7rem;
+  font-weight: 700;
+  color: #94a3b8;
+}

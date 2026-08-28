@@ -122,7 +122,7 @@ export function SpendingCharts({
   return (
     <div className="grid md:grid-cols-2 gap-6">
       {/* SpendFlow Dynamic Wave Statistics Card */}
-      <div className="p-7 rounded-3xl glass-card space-y-6 flex flex-col justify-between">
+      <div id="tour-cashflow-chart" className="p-7 rounded-3xl glass-card space-y-6 flex flex-col justify-between">
         {/* Top Header */}
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-2.5">
@@ -339,7 +339,7 @@ export function SpendingCharts({
       </div>
 
       {/* Right Column: Category Expense Share & Budget Breakdown */}
-      <div className="p-7 rounded-3xl glass-card space-y-6 flex flex-col justify-between">
+      <div id="tour-expenditure-share" className="p-7 rounded-3xl glass-card space-y-6 flex flex-col justify-between">
         <div className="space-y-1">
           <h3 className="text-base font-extrabold text-slate-900 flex items-center gap-2">
             <ShoppingBag className="w-4 h-4 text-slate-700" />

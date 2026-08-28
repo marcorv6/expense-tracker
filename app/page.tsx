@@ -10,7 +10,7 @@ import { TransactionList } from '@/components/TransactionList';
 import { TransactionModal } from '@/components/TransactionModal';
 import { CategoryModal } from '@/components/CategoryModal';
 import { AuthModal } from '@/components/AuthModal';
-import { OnboardingTutorial } from '@/components/OnboardingTutorial';
+import { InteractiveTour, startSpendFlowTour } from '@/components/InteractiveTour';
 import { Footer } from '@/components/Footer';
 import { useAuth } from '@/context/AuthContext';
 import { usePreferences } from '@/context/PreferencesContext';
@@ -22,7 +22,6 @@ import {
   ArrowDownLeft,
 } from 'lucide-react';
 import { toast } from 'sonner';
-import { SPENDFLOW_STORAGE_KEYS } from '@/lib/constants/storage';
 
 export default function DashboardPage() {
   const { isAuthenticated, isLoading: isAuthLoading, isMounted: isAuthMounted } = useAuth();
@@ -47,17 +46,6 @@ export default function DashboardPage() {
   const [txModalDefaultType, setTxModalDefaultType] = useState<'expense' | 'income'>('expense');
   const [editingTransaction, setEditingTransaction] = useState<TransactionItem | null>(null);
   const [isCatModalOpen, setIsCatModalOpen] = useState(false);
-  const [isTutorialOpen, setIsTutorialOpen] = useState(false);
-
-  useEffect(() => {
-    if (typeof window !== 'undefined') {
-      const seen = localStorage.getItem(SPENDFLOW_STORAGE_KEYS.TUTORIAL_SEEN);
-      if (!seen) {
-        const timer = setTimeout(() => setIsTutorialOpen(true), 100);
-        return () => clearTimeout(timer);
-      }
-    }
-  }, []);
 
   const fetchDashboardData = async () => {
     if (!isAuthenticated) return;
@@ -237,6 +225,7 @@ export default function DashboardPage() {
       <Header
         onOpenTransactionModal={(type) => openTxModal(type)}
         onOpenCategoryModal={() => setIsCatModalOpen(true)}
+        onStartTour={() => startSpendFlowTour()}
       />
 
       <main className="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-8">
@@ -258,12 +247,14 @@ export default function DashboardPage() {
             {/* KPI Metrics & Virtual Credit Card Header */}
             <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
               {/* Net Liquidity Available Reserve Display */}
-              <MetricCard
-                title={t.netLiquidity}
-                amount={stats?.totalBalance ?? 0}
-                icon={Wallet}
-                isMainBalanceCard={true}
-              />
+              <div id="tour-net-liquidity">
+                <MetricCard
+                  title={t.netLiquidity}
+                  amount={stats?.totalBalance ?? 0}
+                  icon={Wallet}
+                  isMainBalanceCard={true}
+                />
+              </div>
 
               <MetricCard
                 title={t.grossIncome}
@@ -396,15 +387,7 @@ export default function DashboardPage() {
         onDeleteCategory={handleDeleteCategory}
       />
 
-      <OnboardingTutorial
-        isOpen={isTutorialOpen}
-        onClose={() => {
-          setIsTutorialOpen(false);
-          if (typeof window !== 'undefined') {
-            localStorage.setItem(SPENDFLOW_STORAGE_KEYS.TUTORIAL_SEEN, 'true');
-          }
-        }}
-      />
+      <InteractiveTour autoStartOnFirstVisit={isAuthenticated} />
 
       {/* Mandatory Auth Modal Overlay */}
       {!isAuthenticated && !isAuthLoading && (
