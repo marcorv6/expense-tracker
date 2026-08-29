@@ -180,7 +180,7 @@ export function TransactionModal({
           </div>
 
           {/* Category & Date */}
-          <div className="grid grid-cols-2 gap-3">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 items-start">
             <div className="space-y-1">
               <label className="text-xs font-mono font-bold text-slate-600">{t.categoryLabel}</label>
               <select
