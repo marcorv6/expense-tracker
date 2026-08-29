@@ -109,9 +109,9 @@ export function DatePicker({ value, onChange, label }: DatePickerProps) {
         )}
       </div>
 
-      {/* Custom Inline Expandable Dropdown */}
+      {/* Floating Popover Overlay */}
       {isOpen && (
-        <div className="mt-2 w-full p-3 rounded-2xl bg-white border border-slate-200 shadow-md space-y-3 animate-in fade-in">
+        <div className="absolute top-full right-0 mt-1.5 z-[100] w-80 p-4 rounded-3xl bg-white border border-slate-200 shadow-2xl space-y-3.5 animate-in fade-in zoom-in-95 duration-150">
           {/* Quick Presets */}
           <div className="flex items-center gap-1.5 overflow-x-auto pb-1 no-scrollbar">
             <button

@@ -36,7 +36,7 @@ test.describe('Mobile & Desktop Overlays Visual Layout Suite', () => {
     });
   });
 
-  test('2. Inline DatePicker - Expands Cleanly within Form Flow', async ({ page }) => {
+  test('2. Floating DatePicker Overlay - Opens Cleanly without Layout Shift', async ({ page }) => {
     const addExpenseBtn = page.locator('#tour-add-expense');
     await expect(addExpenseBtn).toBeVisible();
     await addExpenseBtn.click();

@@ -101,9 +101,9 @@ export function TransactionModal({
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-md animate-in fade-in">
-      <div className="w-full max-w-lg rounded-3xl bg-white border border-slate-200 shadow-2xl overflow-hidden flex flex-col justify-between">
+      <div className="w-full max-w-lg max-h-[90vh] overflow-y-auto overflow-x-visible rounded-3xl bg-white border border-slate-200 shadow-2xl flex flex-col justify-between">
         {/* Header */}
-        <div className="p-6 pb-4 border-b border-slate-100 flex items-center justify-between">
+        <div className="p-6 pb-4 border-b border-slate-100 flex items-center justify-between sticky top-0 bg-white/95 backdrop-blur-md z-20">
           <h3 className="text-lg font-extrabold text-slate-900 flex items-center gap-2">
             <Receipt className="w-5 h-5 text-slate-700" />
             {initialData ? 'Audit Transaction Entry' : (type === 'expense' ? t.addExpense : t.addIncome)}
@@ -117,7 +117,7 @@ export function TransactionModal({
         </div>
 
         {/* Form Body */}
-        <form onSubmit={handleSubmit} className="p-6 space-y-4">
+        <form onSubmit={handleSubmit} className="p-6 pb-12 space-y-4">
           {/* Segmented Type Switcher */}
           <div className="grid grid-cols-2 gap-1.5 p-1 rounded-2xl bg-slate-100 border border-slate-200">
             <button
@@ -180,7 +180,7 @@ export function TransactionModal({
           </div>
 
           {/* Category & Date */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 items-start">
+          <div className="grid grid-cols-2 gap-3">
             <div className="space-y-1">
               <label className="text-xs font-mono font-bold text-slate-600">{t.categoryLabel}</label>
               <select
