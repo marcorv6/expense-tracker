@@ -20,10 +20,13 @@ fi
 echo "[2/4] Running Vitest Unit Test Suite & Coverage..."
 npm run test:coverage
 
-echo "[3/4] Running ESLint Code Quality Gate..."
+echo "[3/5] Running ESLint Code Quality Gate..."
 npm run lint
 
-echo "[4/4] Building Next.js Production Bundle..."
+echo "[4/5] Running Playwright Visual Layout Regression Suite..."
+npm run test:visual
+
+echo "[5/5] Building Next.js Production Bundle..."
 npm run build
 
 echo "=== ✅ All Agent Verification Gates Passed Successfully! ==="

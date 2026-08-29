@@ -113,7 +113,7 @@ export function Header({ onOpenTransactionModal, onStartTour }: HeaderProps) {
           <button
             id="tour-add-expense"
             onClick={() => onOpenTransactionModal('expense')}
-            className="hidden md:inline-flex items-center gap-2 px-3.5 py-2 rounded-xl bg-slate-900 hover:bg-slate-800 text-white text-xs font-bold font-mono transition-all shadow-md shadow-slate-900/10 active:scale-95 cursor-pointer"
+            className="inline-flex items-center gap-2 px-3.5 py-2 rounded-xl bg-slate-900 hover:bg-slate-800 text-white text-xs font-bold font-mono transition-all shadow-md shadow-slate-900/10 active:scale-95 cursor-pointer"
           >
             <Plus className="w-4 h-4" />
             <span>{t.addExpense}</span>
