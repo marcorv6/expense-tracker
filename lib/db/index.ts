@@ -13,7 +13,10 @@ if (!process.env.DATABASE_URL) {
   }
 }
 
-const connectionString = process.env.DATABASE_URL;
+let connectionString = process.env.DATABASE_URL;
+if (connectionString) {
+  connectionString = connectionString.replace(/sslmode=(require|prefer|verify-ca)/g, 'sslmode=verify-full');
+}
 
 // PostgreSQL connection pool instance for Neon serverless
 const pool = connectionString
