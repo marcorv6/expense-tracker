@@ -78,7 +78,7 @@ export function TransactionCard({
               </span>
             </div>
 
-            <div className="flex items-center gap-1.5 text-[10px] sm:text-[11px] font-mono text-slate-400 truncate">
+            <div className="flex items-center gap-1.5 text-[10px] sm:text-[11px] font-mono text-slate-600 font-medium truncate">
               <span>{formattedDate}</span>
               <span>•</span>
               <span className="capitalize">{transaction.paymentMethod.replace('_', ' ')}</span>
@@ -90,7 +90,7 @@ export function TransactionCard({
         <div className="text-right sm:hidden shrink-0">
           <div
             className={`text-xs font-extrabold font-mono tabular-nums ${
-              isExpense ? 'text-slate-900' : 'text-emerald-600'
+              isExpense ? 'text-slate-900' : 'text-emerald-700'
             }`}
           >
             {isExpense ? `-${formatCurrency(transaction.amount)}` : `+${formatCurrency(transaction.amount)}`}
@@ -103,7 +103,7 @@ export function TransactionCard({
         <button
           onClick={() => onStatusToggle(transaction)}
           className={`inline-flex items-center gap-1 text-[10px] font-mono font-bold cursor-pointer transition-colors ${
-            isCleared ? 'text-emerald-600' : 'text-amber-600'
+            isCleared ? 'text-emerald-700' : 'text-amber-700'
           }`}
         >
           {isCleared ? (

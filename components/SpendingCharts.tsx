@@ -133,7 +133,7 @@ export function SpendingCharts({
               <h3 className="text-base font-extrabold text-slate-900 tracking-tight leading-tight">
                 {t.cashflowDynamics}
               </h3>
-              <span className="text-[11px] font-mono text-slate-400 font-semibold">
+              <span className="text-[11px] font-mono text-slate-600 font-bold">
                 {t.cashflowDesc}
               </span>
             </div>
@@ -154,7 +154,7 @@ export function SpendingCharts({
             <div className="text-3xl font-extrabold font-mono text-slate-900 tabular-nums tracking-tight">
               {formatCurrency(activePoint.amount)}
             </div>
-            <span className="text-xs font-mono text-slate-400 block font-medium">
+            <span className="text-xs font-mono text-slate-600 block font-bold">
               {t.auditPeriod}: {activePoint.month} 16, 2026
             </span>
           </div>
@@ -164,7 +164,7 @@ export function SpendingCharts({
             <button
               onClick={() => setTimeframe('week')}
               className={`px-3 py-1 rounded-xl font-bold capitalize transition-all cursor-pointer ${
-                timeframe === 'week' ? 'bg-slate-900 text-white shadow-sm' : 'text-slate-500 hover:text-slate-900'
+                timeframe === 'week' ? 'bg-slate-900 text-white shadow-sm' : 'text-slate-700 hover:text-slate-900'
               }`}
             >
               {t.week}
@@ -172,7 +172,7 @@ export function SpendingCharts({
             <button
               onClick={() => setTimeframe('month')}
               className={`px-3 py-1 rounded-xl font-bold capitalize transition-all cursor-pointer ${
-                timeframe === 'month' ? 'bg-slate-900 text-white shadow-sm' : 'text-slate-500 hover:text-slate-900'
+                timeframe === 'month' ? 'bg-slate-900 text-white shadow-sm' : 'text-slate-700 hover:text-slate-900'
               }`}
             >
               {t.month}
@@ -180,7 +180,7 @@ export function SpendingCharts({
             <button
               onClick={() => setTimeframe('year')}
               className={`px-3 py-1 rounded-xl font-bold capitalize transition-all cursor-pointer ${
-                timeframe === 'year' ? 'bg-slate-900 text-white shadow-sm' : 'text-slate-500 hover:text-slate-900'
+                timeframe === 'year' ? 'bg-slate-900 text-white shadow-sm' : 'text-slate-700 hover:text-slate-900'
               }`}
             >
               {t.year}
@@ -274,13 +274,13 @@ export function SpendingCharts({
           </svg>
 
           {/* Month Labels along X-Axis */}
-          <div className="flex items-center justify-between text-xs font-mono text-slate-400 font-semibold px-2 pt-2">
+          <div className="flex items-center justify-between text-xs font-mono text-slate-600 font-bold px-2 pt-2">
             {chartPoints.map((pt, idx) => (
               <button
                 key={pt.month}
                 onClick={() => setSelectedIndex(idx)}
                 className={`transition-all cursor-pointer ${
-                  activeIndex === idx ? 'text-slate-900 font-extrabold text-sm' : 'hover:text-slate-600'
+                  activeIndex === idx ? 'text-slate-900 font-extrabold text-sm' : 'text-slate-600 hover:text-slate-900'
                 }`}
               >
                 {pt.month}
@@ -313,7 +313,7 @@ export function SpendingCharts({
                       <span className="text-xs font-bold text-slate-900 block leading-tight">
                         {tx.description}
                       </span>
-                      <span className="text-[10px] font-mono text-slate-400">
+                      <span className="text-[10px] font-mono text-slate-600 font-bold">
                         {new Date(tx.date).toLocaleDateString('en-US', {
                           month: 'short',
                           day: 'numeric',
@@ -329,7 +329,7 @@ export function SpendingCharts({
               ))
             ) : (
               <div className="p-3 rounded-2xl bg-slate-50 border border-slate-100 text-center">
-                <span className="text-xs font-mono text-slate-400">
+                <span className="text-xs font-mono text-slate-600 font-bold">
                   No recent activity highlights logged.
                 </span>
               </div>

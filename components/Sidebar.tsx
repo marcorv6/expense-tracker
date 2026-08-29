@@ -67,7 +67,7 @@ export function Sidebar({
 
       {/* Main Glass Navigation Panel */}
       <div className="p-3 rounded-3xl glass-card space-y-1">
-        <span className="px-3 py-2 text-[10px] font-mono text-slate-400 uppercase tracking-widest block font-bold">
+        <span className="px-3 py-2 text-[10px] font-mono text-slate-600 uppercase tracking-widest block font-bold">
           {t.financialHub}
         </span>
         {mainNav.map((item) => {
@@ -80,10 +80,10 @@ export function Sidebar({
               className={`w-full flex items-center gap-3 px-3.5 py-2.5 rounded-2xl text-xs font-bold transition-all cursor-pointer ${
                 isActive
                   ? 'bg-slate-900 text-white shadow-md shadow-slate-900/10'
-                  : 'text-slate-500 hover:text-slate-900 hover:bg-slate-50'
+                  : 'text-slate-600 hover:text-slate-900 hover:bg-slate-50'
               }`}
             >
-              <Icon className={`w-4 h-4 ${isActive ? 'text-white' : 'text-slate-400'}`} />
+              <Icon className={`w-4 h-4 ${isActive ? 'text-white' : 'text-slate-500'}`} />
               <span>{item.label}</span>
             </button>
           );
@@ -93,7 +93,7 @@ export function Sidebar({
       {/* Categories & Budgets Filter Panel */}
       <div className="p-4 rounded-3xl glass-card space-y-3">
         <div className="flex items-center justify-between px-1">
-          <span className="text-[10px] font-mono text-slate-400 uppercase tracking-widest block font-bold">
+          <span className="text-[10px] font-mono text-slate-600 uppercase tracking-widest block font-bold">
             {t.categoriesAndCaps}
           </span>
           <button
@@ -111,7 +111,7 @@ export function Sidebar({
             className={`w-full flex items-center justify-between px-3 py-2 rounded-2xl text-xs transition-all cursor-pointer ${
               selectedCategory === ''
                 ? 'bg-slate-100 font-extrabold text-slate-900 border border-slate-200'
-                : 'text-slate-500 hover:text-slate-900 hover:bg-slate-50'
+                : 'text-slate-600 hover:text-slate-900 hover:bg-slate-50'
             }`}
           >
             <span className="flex items-center gap-2">
@@ -127,7 +127,7 @@ export function Sidebar({
               className={`w-full flex items-center justify-between px-3 py-2 rounded-2xl text-xs transition-all cursor-pointer ${
                 selectedCategory === cat.id
                   ? 'bg-slate-100 font-extrabold text-slate-900 border border-slate-200'
-                  : 'text-slate-500 hover:text-slate-900 hover:bg-slate-50'
+                  : 'text-slate-600 hover:text-slate-900 hover:bg-slate-50'
               }`}
             >
               <span className="flex items-center gap-2 truncate">
@@ -138,7 +138,7 @@ export function Sidebar({
                 <span className="truncate">{cat.name}</span>
               </span>
               {cat.monthlyBudget > 0 && (
-                <span className="text-[10px] font-mono text-slate-500 font-semibold">
+                <span className="text-[10px] font-mono text-slate-600 font-bold">
                   {formatCurrency(cat.monthlyBudget)}
                 </span>
               )}
@@ -148,8 +148,8 @@ export function Sidebar({
       </div>
 
       {/* Export & Data Tools */}
-      <div className="p-4 rounded-3xl glass-card space-y-2.5">
-        <span className="text-[10px] font-mono text-slate-400 uppercase tracking-widest block font-bold px-1">
+      <div className="p-4 rounded-3xl glass-card space-y-2.5 min-h-[140px]">
+        <span className="text-[10px] font-mono text-slate-600 uppercase tracking-widest block font-bold px-1">
           {t.dataExport} & Backup
         </span>
         <div className="grid grid-cols-2 gap-2">

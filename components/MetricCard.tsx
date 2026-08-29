@@ -40,7 +40,7 @@ export function MetricCard({
               <span className="text-[11px] font-mono text-slate-500 uppercase tracking-wider font-extrabold block">
                 {title}
               </span>
-              <span className="text-xs text-slate-400 font-mono">Checking + Savings Balance</span>
+              <span className="text-xs text-slate-600 font-mono font-medium">Checking + Savings Balance</span>
             </div>
           </div>
 
