@@ -24,7 +24,7 @@ test.describe('Mobile & Desktop Overlays Visual Layout Suite', () => {
   });
 
   test('1. Transaction Modal - Clean Layout without Overlaps', async ({ page }) => {
-    const addExpenseBtn = page.locator('#tour-add-expense');
+    const addExpenseBtn = page.locator('#tour-add-expense:visible, #tour-add-expense-mobile:visible').first();
     await expect(addExpenseBtn).toBeVisible();
     await addExpenseBtn.click();
 
@@ -37,7 +37,7 @@ test.describe('Mobile & Desktop Overlays Visual Layout Suite', () => {
   });
 
   test('2. Floating DatePicker Overlay - Opens Cleanly without Layout Shift', async ({ page }) => {
-    const addExpenseBtn = page.locator('#tour-add-expense');
+    const addExpenseBtn = page.locator('#tour-add-expense:visible, #tour-add-expense-mobile:visible').first();
     await expect(addExpenseBtn).toBeVisible();
     await addExpenseBtn.click();
 
@@ -56,7 +56,7 @@ test.describe('Mobile & Desktop Overlays Visual Layout Suite', () => {
   });
 
   test('3. Category Modal Overlay - Custom Category Creator', async ({ page }) => {
-    const addExpenseBtn = page.locator('#tour-add-expense');
+    const addExpenseBtn = page.locator('#tour-add-expense:visible, #tour-add-expense-mobile:visible').first();
     await expect(addExpenseBtn).toBeVisible();
     await addExpenseBtn.click();
 

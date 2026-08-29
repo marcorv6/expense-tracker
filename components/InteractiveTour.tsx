@@ -7,6 +7,8 @@ import { SPENDFLOW_STORAGE_KEYS } from '@/lib/constants/storage';
 
 export function startSpendFlowTour() {
   if (typeof window === 'undefined') return;
+  // Skip interactive tour on mobile screens as tour controls are desktop-only
+  if (window.innerWidth < 640) return;
 
   const driverObj = driver({
     showProgress: true,

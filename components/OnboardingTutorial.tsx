@@ -23,6 +23,7 @@ export function OnboardingTutorial({ isOpen, onClose }: OnboardingTutorialProps)
   const [currentStep, setCurrentStep] = useState(0);
 
   if (!isOpen) return null;
+  if (typeof window !== 'undefined' && window.innerWidth < 640) return null;
 
   const steps = [
     {
