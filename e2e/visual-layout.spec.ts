@@ -82,4 +82,18 @@ test.describe('Mobile & Desktop Overlays Visual Layout Suite', () => {
       });
     }
   });
+
+  test('5. Massive Data Import Wizard Modal Overlay', async ({ page }) => {
+    const importBtn = page.locator('button:has-text("Import CSV / JSON")').first();
+    if (await importBtn.isVisible()) {
+      await importBtn.click();
+
+      const importHeading = page.locator('h3:has-text("Massive Data Import Wizard")');
+      await expect(importHeading).toBeVisible();
+
+      await expect(page.locator('body')).toHaveScreenshot('5-import-modal-wizard.png', {
+        maxDiffPixelRatio: 0.05,
+      });
+    }
+  });
 });

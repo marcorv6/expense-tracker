@@ -20,10 +20,11 @@ import {
 interface HeaderProps {
   onOpenTransactionModal: (type?: 'expense' | 'income') => void;
   onOpenCategoryModal: () => void;
+  onOpenImportModal?: () => void;
   onStartTour?: () => void;
 }
 
-export function Header({ onOpenTransactionModal, onStartTour }: HeaderProps) {
+export function Header({ onOpenTransactionModal, onOpenImportModal, onStartTour }: HeaderProps) {
   const { user, isAuthenticated, logout, loginAsDemoGuest } = useAuth();
   const { currency, setCurrency, language, setLanguage, t } = usePreferences();
   const [isAuthModalOpen, setIsAuthModalOpen] = useState(false);
@@ -127,6 +128,16 @@ export function Header({ onOpenTransactionModal, onStartTour }: HeaderProps) {
             <ArrowUpRight className="w-4 h-4 text-emerald-600" />
             <span>{t.addIncome}</span>
           </button>
+
+          {onOpenImportModal && (
+            <button
+              onClick={onOpenImportModal}
+              className="hidden xl:inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-cyan-50 border border-cyan-200/80 hover:bg-cyan-100 text-cyan-700 text-xs font-bold font-mono transition-all active:scale-95 cursor-pointer"
+              title="Bulk import CSV / JSON records"
+            >
+              <span>Import Data</span>
+            </button>
+          )}
 
           {/* Auth Controls */}
           {isAuthenticated ? (

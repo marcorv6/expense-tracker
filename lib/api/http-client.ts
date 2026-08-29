@@ -206,4 +206,15 @@ export const httpClient: ApiClientInterface = {
       return mockApiClient.exportData(format);
     }
   },
+
+  async importTransactionsBatch(items: unknown[]) {
+    try {
+      const res = await axios.post(`${API_BASE}/transactions/import`, { items }, {
+        headers: getHeaders(),
+      });
+      return res.data;
+    } catch {
+      return mockApiClient.importTransactionsBatch(items);
+    }
+  },
 };

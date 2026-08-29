@@ -4,8 +4,10 @@ import {
   Category,
   CreateTransactionInput,
   FinancialStats,
+  PaymentMethod,
 } from '@/types/expense';
 import { User } from '@/types/auth';
+import { ValidatedImportRecord } from '@/lib/utils/csv-parser';
 
 const DEMO_USER: User = {
   id: 'demo-user-123',
@@ -562,6 +564,54 @@ export const mockApiClient: ApiClientInterface = {
     const blob = new Blob([content], { type: mimeType });
     const filename = `spendflow-export-${new Date().toISOString().slice(0, 10)}.${format}`;
     return { blob, filename };
+  },
+
+  async importTransactionsBatch(items: ValidatedImportRecord[]) {
+    const user = this.getCurrentUser();
+    const userId = user?.id || 'demo-user-123';
+    const categories = getStoredCategories();
+    const stored = getStoredTransactions();
+
+    let importedCount = 0;
+    const newTxList: TransactionItem[] = [];
+    const now = new Date();
+
+    items.forEach((item, idx) => {
+      if (!item.isValid) return;
+
+      const cat = categories.find(
+        (c) => c.name.toLowerCase() === (item.categoryName || '').toLowerCase() && c.type === item.type
+      );
+      const catId = cat ? cat.id : categories[0]?.id || 'cat-1';
+      const catName = cat ? cat.name : 'General';
+      const catColor = cat ? cat.color : '#64748b';
+
+      const isFuture = new Date(item.date + 'T00:00:00').getTime() > now.getTime();
+
+      const newTx: TransactionItem = {
+        id: `tx-import-${Date.now()}-${idx}`,
+        userId,
+        categoryId: catId,
+        categoryName: catName,
+        categoryColor: catColor,
+        type: item.type,
+        amount: item.amount,
+        currency: 'MXN',
+        description: item.description,
+        date: item.date,
+        paymentMethod: (item.paymentMethod as PaymentMethod) || 'credit_card',
+        status: isFuture ? 'pending' : 'cleared',
+        notes: item.notes || '',
+        createdAt: new Date().toISOString(),
+        updatedAt: new Date().toISOString(),
+      };
+
+      newTxList.push(newTx);
+      importedCount++;
+    });
+
+    setStoredTransactions([...newTxList, ...stored]);
+    return { success: true, importedCount, totalReceived: items.length };
   },
 
   resetToDefaults() {

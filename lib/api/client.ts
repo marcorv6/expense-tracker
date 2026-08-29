@@ -32,6 +32,7 @@ export interface ApiClientInterface {
   
   getStats(): Promise<FinancialStats>;
   exportData(format: 'csv' | 'json'): Promise<{ blob: Blob; filename: string }>;
+  importTransactionsBatch(items: unknown[]): Promise<{ success: boolean; importedCount: number; totalReceived: number }>;
   resetToDefaults?(): void;
 }
 
@@ -113,5 +114,11 @@ export const api: ApiClientInterface = {
   },
   async exportData(format) {
     return getActiveClient().exportData(format);
+  },
+  async importTransactionsBatch(items: unknown[]) {
+    if (process.env.NEXT_PUBLIC_USE_MOCK_API === 'true' || isDemoUser()) {
+      return mockApiClient.importTransactionsBatch(items);
+    }
+    return httpClient.importTransactionsBatch(items);
   },
 };

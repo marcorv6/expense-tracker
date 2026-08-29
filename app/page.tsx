@@ -9,6 +9,7 @@ import { BudgetOverview } from '@/components/BudgetOverview';
 import { TransactionList } from '@/components/TransactionList';
 import { TransactionModal } from '@/components/TransactionModal';
 import { CategoryModal } from '@/components/CategoryModal';
+import { ImportModal } from '@/components/ImportModal';
 import { AuthModal } from '@/components/AuthModal';
 import { InteractiveTour, startSpendFlowTour } from '@/components/InteractiveTour';
 import { Footer } from '@/components/Footer';
@@ -46,6 +47,7 @@ export default function DashboardPage() {
   const [txModalDefaultType, setTxModalDefaultType] = useState<'expense' | 'income'>('expense');
   const [editingTransaction, setEditingTransaction] = useState<TransactionItem | null>(null);
   const [isCatModalOpen, setIsCatModalOpen] = useState(false);
+  const [isImportModalOpen, setIsImportModalOpen] = useState(false);
 
   const fetchDashboardData = async () => {
     if (!isAuthenticated) return;
@@ -225,6 +227,7 @@ export default function DashboardPage() {
       <Header
         onOpenTransactionModal={(type) => openTxModal(type)}
         onOpenCategoryModal={() => setIsCatModalOpen(true)}
+        onOpenImportModal={() => setIsImportModalOpen(true)}
         onStartTour={() => startSpendFlowTour()}
       />
 
@@ -239,6 +242,7 @@ export default function DashboardPage() {
             setSelectedCategory={setSelectedCategory}
             onOpenTransactionModal={(type) => openTxModal(type)}
             onOpenCategoryModal={() => setIsCatModalOpen(true)}
+            onOpenImportModal={() => setIsImportModalOpen(true)}
             onExport={handleExport}
           />
 
@@ -385,6 +389,12 @@ export default function DashboardPage() {
         categories={categories}
         onCreateCategory={handleCreateCategory}
         onDeleteCategory={handleDeleteCategory}
+      />
+
+      <ImportModal
+        isOpen={isImportModalOpen}
+        onClose={() => setIsImportModalOpen(false)}
+        onImportSuccess={fetchDashboardData}
       />
 
       <InteractiveTour autoStartOnFirstVisit={isAuthenticated} />

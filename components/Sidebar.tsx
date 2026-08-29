@@ -21,6 +21,7 @@ interface SidebarProps {
   setSelectedCategory: (id: string) => void;
   onOpenTransactionModal: (type?: 'expense' | 'income') => void;
   onOpenCategoryModal: () => void;
+  onOpenImportModal?: () => void;
   onExport: (format: 'csv' | 'json') => void;
 }
 
@@ -32,6 +33,7 @@ export function Sidebar({
   setSelectedCategory,
   onOpenTransactionModal,
   onOpenCategoryModal,
+  onOpenImportModal,
   onExport,
 }: SidebarProps) {
   const { t, formatCurrency } = usePreferences();
@@ -148,7 +150,7 @@ export function Sidebar({
       {/* Export & Data Tools */}
       <div className="p-4 rounded-3xl glass-card space-y-2.5">
         <span className="text-[10px] font-mono text-slate-400 uppercase tracking-widest block font-bold px-1">
-          {t.dataExport}
+          {t.dataExport} & Backup
         </span>
         <div className="grid grid-cols-2 gap-2">
           <button
@@ -167,6 +169,15 @@ export function Sidebar({
             <span>.JSON</span>
           </button>
         </div>
+
+        {onOpenImportModal && (
+          <button
+            onClick={onOpenImportModal}
+            className="w-full flex items-center justify-center gap-2 py-2 px-3 rounded-2xl bg-cyan-50 border border-cyan-200 text-cyan-800 hover:bg-cyan-100 text-xs font-mono font-bold transition-all cursor-pointer shadow-sm"
+          >
+            <span>Import CSV / JSON</span>
+          </button>
+        )}
       </div>
     </aside>
   );
