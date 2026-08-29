@@ -121,7 +121,7 @@ export function Header({ onOpenTransactionModal, onOpenImportModal, onStartTour 
           </button>
 
           <button
-            id="tour-add-income"
+            id="tour-add-income-desktop"
             onClick={() => onOpenTransactionModal('income')}
             className="hidden lg:inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-emerald-50 border border-emerald-200/80 hover:bg-emerald-100 text-emerald-700 text-xs font-bold font-mono transition-all active:scale-95 cursor-pointer"
           >
@@ -195,17 +195,6 @@ export function Header({ onOpenTransactionModal, onOpenImportModal, onStartTour 
           )}
         </div>
       </div>
-
-      {/* Mobile Floating Action Button (FAB) for adding expenses */}
-      <button
-        id="tour-add-expense-mobile"
-        onClick={() => onOpenTransactionModal('expense')}
-        className="sm:hidden fixed bottom-6 right-5 z-40 flex items-center gap-2 px-4 py-3 rounded-full bg-slate-900 text-white font-bold font-mono text-xs shadow-2xl shadow-slate-900/40 border border-slate-700/50 hover:bg-slate-800 active:scale-95 transition-all cursor-pointer"
-        aria-label={t.addExpense}
-      >
-        <Plus className="w-4 h-4 text-cyan-400" />
-        <span>{t.addExpense}</span>
-      </button>
 
       <AuthModal isOpen={isAuthModalOpen} onClose={() => setIsAuthModalOpen(false)} />
     </header>

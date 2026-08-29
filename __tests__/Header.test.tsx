@@ -66,13 +66,10 @@ describe('Header Component', () => {
       />
     );
 
-    const addExpenseBtns = screen.getAllByRole('button', { name: /Add Expense|Agregar Gasto/i });
+    const addExpenseBtn = screen.getByRole('button', { name: /Add Expense|Agregar Gasto/i });
     const addIncomeBtn = screen.getByRole('button', { name: /Add Income|Agregar Ingreso/i });
 
-    fireEvent.click(addExpenseBtns[0]);
-    expect(handleOpenTx).toHaveBeenCalledWith('expense');
-
-    fireEvent.click(addExpenseBtns[1]);
+    fireEvent.click(addExpenseBtn);
     expect(handleOpenTx).toHaveBeenCalledWith('expense');
 
     fireEvent.click(addIncomeBtn);

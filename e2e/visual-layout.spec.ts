@@ -20,11 +20,12 @@ test.describe('Mobile & Desktop Overlays Visual Layout Suite', () => {
     });
 
     await page.goto('/');
-    await page.waitForLoadState('networkidle');
+    await expect(page.locator('body')).not.toContainText('Initializing SpendFlow Workspace...', { timeout: 15000 });
   });
 
-  test('1. Transaction Modal - Clean Layout without Overlaps', async ({ page }) => {
-    const addExpenseBtn = page.locator('#tour-add-expense:visible, #tour-add-expense-mobile:visible').first();
+  test('1. Transaction Modal - Clean Layout without Overlaps', async ({ page }, testInfo) => {
+    const isMobile = testInfo.project.name.includes('mobile');
+    const addExpenseBtn = page.locator(isMobile ? '#tour-add-expense-mobile' : '#tour-add-expense');
     await expect(addExpenseBtn).toBeVisible();
     await addExpenseBtn.click();
 
@@ -36,8 +37,9 @@ test.describe('Mobile & Desktop Overlays Visual Layout Suite', () => {
     });
   });
 
-  test('2. Floating DatePicker Overlay - Opens Cleanly without Layout Shift', async ({ page }) => {
-    const addExpenseBtn = page.locator('#tour-add-expense:visible, #tour-add-expense-mobile:visible').first();
+  test('2. Floating DatePicker Overlay - Opens Cleanly without Layout Shift', async ({ page }, testInfo) => {
+    const isMobile = testInfo.project.name.includes('mobile');
+    const addExpenseBtn = page.locator(isMobile ? '#tour-add-expense-mobile' : '#tour-add-expense');
     await expect(addExpenseBtn).toBeVisible();
     await addExpenseBtn.click();
 
@@ -55,8 +57,9 @@ test.describe('Mobile & Desktop Overlays Visual Layout Suite', () => {
     });
   });
 
-  test('3. Category Modal Overlay - Custom Category Creator', async ({ page }) => {
-    const addExpenseBtn = page.locator('#tour-add-expense:visible, #tour-add-expense-mobile:visible').first();
+  test('3. Category Modal Overlay - Custom Category Creator', async ({ page }, testInfo) => {
+    const isMobile = testInfo.project.name.includes('mobile');
+    const addExpenseBtn = page.locator(isMobile ? '#tour-add-expense-mobile' : '#tour-add-expense');
     await expect(addExpenseBtn).toBeVisible();
     await addExpenseBtn.click();
 

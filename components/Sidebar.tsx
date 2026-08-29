@@ -50,15 +50,17 @@ export function Sidebar({
       {/* Mobile Quick Action Bar */}
       <div className="flex gap-2 sm:hidden">
         <button
+          id="tour-add-expense-mobile"
           onClick={() => onOpenTransactionModal('expense')}
-          className="flex-1 py-3 px-4 rounded-2xl bg-slate-900 text-white font-bold text-xs flex items-center justify-center gap-2 shadow-lg shadow-slate-900/10"
+          className="flex-1 py-3 px-4 rounded-2xl bg-slate-900 hover:bg-slate-800 text-white font-bold text-xs flex items-center justify-center gap-2 shadow-lg shadow-slate-900/10 active:scale-95 cursor-pointer transition-all"
         >
-          <Plus className="w-4 h-4" />
+          <Plus className="w-4 h-4 text-cyan-400" />
           <span>{t.addExpense}</span>
         </button>
         <button
+          id="tour-add-income-mobile"
           onClick={() => onOpenTransactionModal('income')}
-          className="flex-1 py-3 px-4 rounded-2xl bg-emerald-50 border border-emerald-200 text-emerald-700 font-bold text-xs flex items-center justify-center gap-2"
+          className="flex-1 py-3 px-4 rounded-2xl bg-emerald-50 border border-emerald-200 hover:bg-emerald-100 text-emerald-700 font-bold text-xs flex items-center justify-center gap-2 active:scale-95 cursor-pointer transition-all"
         >
           <ArrowUpRight className="w-4 h-4 text-emerald-600" />
           <span>{t.addIncome}</span>
